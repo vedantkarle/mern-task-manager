@@ -1,0 +1,16 @@
+:root{
+    --turquoise:#44ddd0;
+    --green:#27d7a1;
+    --lightGreen:#45f69e;
+    --light:#f8f8f8;
+    --darkGreen:rgb(0,100,80);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+

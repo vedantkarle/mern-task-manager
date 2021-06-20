@@ -1,0 +1,49 @@
+.cardHeader{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+}
+
+.cardHeader-right{
+    display: flex;
+}
+
+.desc{
+    float:right;
+}
+
+.todos{
+    display: flex;
+    flex-direction:column;
+    align-items:space-between;
+    margin-right:10px;
+}
+
+.todo{
+    margin-top:8px;
+}
+
+.task-header{
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.task-content{
+    display: flex;
+    justify-content:space-between;
+    align-items:start;
+}
+
+.task-content .todos{
+    width:70%;
+}
+
+.task-content .members{
+    width:30%;
+}
+
+.todo-buttons{
+    display: flex;
+    justify-content:space-between;
+}
