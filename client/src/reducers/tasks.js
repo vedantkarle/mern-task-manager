@@ -50,9 +50,16 @@ export default (state = initialState, { type, payload }) => {
 		case "ADD_TODO":
 			return {
 				...state,
-				tasks: state.tasks.map(task =>
-					task._id === payload._id ? payload : task
-				),
+			};
+		case "EDIT_TODO":
+			return {
+				...state,
+				message: payload.message,
+			};
+		case "DELETE_TODO":
+			return {
+				...state,
+				message: payload.message,
 			};
 		case "SET_ERROR":
 			return {

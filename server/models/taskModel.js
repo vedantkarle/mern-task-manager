@@ -20,14 +20,8 @@ const taskSchema = mongoose.Schema(
 		},
 		todos: [
 			{
-				description: {
-					type: String,
-					required: true,
-				},
-				completed: {
-					type: Boolean,
-					default: false,
-				},
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Todo",
 			},
 		],
 		completed: {
@@ -36,12 +30,11 @@ const taskSchema = mongoose.Schema(
 		},
 		members: [
 			{
-				id: { type: mongoose.Schema.Types.ObjectId },
-				name: { type: String, required: true },
-				email: { type: String, required: true },
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
 			},
 		],
-		owner: { type: mongoose.Schema.Types.ObjectId },
+		owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	},
 	{ timestamps: true }
 );

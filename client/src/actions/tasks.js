@@ -10,6 +10,7 @@ export const getTasks = () => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
+		console.log(error);
 		dispatch({ type: "SET_ERROR", payload: error.message });
 	}
 };
@@ -59,6 +60,7 @@ export const updateTask = (id, task) => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
+		console.log(error);
 		dispatch({ type: "SET_ERROR", payload: error.message });
 	}
 };
@@ -86,6 +88,42 @@ export const addTodoToTask = (id, todo) => async dispatch => {
 		const { data } = await api.addTodo(id, todo);
 
 		dispatch({ type: "ADD_TODO", payload: data });
+
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: data });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({ type: "SET_ERROR", payload: error.message });
+	}
+};
+
+export const editTodo = (taskId, todoId, todo) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const { data } = await api.editTodo(taskId, todoId, todo);
+
+		dispatch({ type: "EDIT_TODO", payload: data });
+
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: data.task });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({ type: "SET_ERROR", payload: error.message });
+	}
+};
+
+export const deleteTodo = (taskId, todoId) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const {
+			data: { task, message },
+		} = await api.deleteTodo(taskId, todoId);
+
+		dispatch({ type: "DELETE_TODO", payload: { task, message } });
+
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: task });
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {

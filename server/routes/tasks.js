@@ -6,6 +6,8 @@ const {
 	updateTask,
 	deleteTask,
 	addTodo,
+	editTodo,
+	deleteTodo,
 } = require("../controllers/tasks");
 const router = express.Router();
 
@@ -15,5 +17,7 @@ router.post("/", createTask);
 router.patch("/:id", updateTask);
 router.delete("/:id", deleteTask);
 router.post("/:id/todo", addTodo);
+router.patch("/:taskId/todo/:todoId", editTodo);
+router.delete("/:taskId/todo/:todoId", deleteTodo);
 
 module.exports = router;

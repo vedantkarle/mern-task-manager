@@ -3,12 +3,14 @@ import { useSelector } from "react-redux";
 import AddTodoForm from "../Form/AddTodoForm";
 import CreateProjectForm from "../Form/CreateProjectForm";
 import EditProjectForm from "../Form/EditProjectForm";
+import EditTodoForm from "../Form/EditTodoForm";
 
 const ModalManager = () => {
 	const modalLookup = {
 		CreateProjectForm,
 		EditProjectForm,
 		AddTodoForm,
+		EditTodoForm,
 	};
 	const currentModal = useSelector(state => state.modals);
 	let renderedModal;

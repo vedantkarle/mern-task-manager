@@ -13,7 +13,7 @@ import {
 	Message,
 	Segment,
 } from "semantic-ui-react";
-import { fetchSingleTask } from "../../actions/tasks";
+import { deleteTodo, fetchSingleTask } from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
 import "./Task.css";
 
@@ -55,14 +55,34 @@ const TaskDetail = ({ match }) => {
 						<Segment.Group>
 							{task?.todos.length > 0 ? (
 								task?.todos.map(todo => {
+									const id = todo._id;
 									return (
 										<Segment>
 											<Checkbox label={todo?.description} />
 											<div className='todo-buttons'>
 												<div></div>
 												<div>
-													<Button circular icon='edit' color='yellow' />
-													<Button circular icon='trash' color='red' />
+													<Button
+														onClick={() =>
+															dispatch(
+																openModal({
+																	modalType: "EditTodoForm",
+																	modalProps: { id },
+																})
+															)
+														}
+														circular
+														icon='edit'
+														color='yellow'
+													/>
+													<Button
+														onClick={() =>
+															dispatch(deleteTodo(task._id, todo._id))
+														}
+														circular
+														icon='trash'
+														color='red'
+													/>
 												</div>
 											</div>
 										</Segment>
