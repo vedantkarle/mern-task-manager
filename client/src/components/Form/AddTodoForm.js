@@ -1,37 +1,31 @@
 import { Form, Formik } from "formik";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Segment } from "semantic-ui-react";
 import * as Yup from "yup";
-import { createTask } from "../../actions/tasks";
+import { addTodoToTask } from "../../actions/tasks";
 import { closeModal } from "../../reducers/modal";
 import ModalWrapper from "../Modal/ModalWrapper";
-import DateInput from "./DateInput";
 import TextInput from "./TextInput";
 
-const CreateProjectForm = () => {
+const AddTodoForm = () => {
 	const dispatch = useDispatch();
 
+	const { modalProps } = useSelector(state => state.modals);
+
 	const initialValues = {
-		projectName: "",
 		description: "",
-		startDate: "",
-		endDate: "",
 	};
 
 	const validationSchema = Yup.object({
-		projectName: Yup.string().required("You must provide a project name"),
 		description: Yup.string().required("You must provide a description"),
-		startDate: Yup.date().required("You must provide a start date"),
-		endDate: Yup.date().required("You must provide a end date"),
 	});
 
 	const handleSubmit = values => {
-		dispatch(createTask(values));
+		dispatch(addTodoToTask(modalProps.id, values));
 	};
-
 	return (
-		<ModalWrapper size='large' header='Add Project'>
+		<ModalWrapper size='large' header='Add Todo'>
 			<Segment style={{ width: "100%" }} clearing>
 				<Formik
 					initialValues={initialValues}
@@ -44,40 +38,17 @@ const CreateProjectForm = () => {
 					{({ isSubmitting, dirty, isValid }) => (
 						<Form className='ui form'>
 							<TextInput
-								name='projectName'
-								placeholder='Enter project name'
-								label='Project Name'
-							/>
-							<TextInput
 								name='description'
-								placeholder='Enter project description'
-								label='Project Description'
+								placeholder='Enter todo description'
+								label='Todo Description'
 							/>
-							<div style={{ display: "flex", justifyContent: "start" }}>
-								<DateInput
-									name='startDate'
-									label='Start Date'
-									timeFormat='HH:mm'
-									showTimeSelect
-									timeCaption='time'
-									dateFormat='MMMM d, yyyy h:mm a'
-								/>
-								<DateInput
-									name='endDate'
-									label='End Date'
-									timeFormat='HH:mm'
-									showTimeSelect
-									timeCaption='time'
-									dateFormat='MMMM d, yyyy h:mm a'
-								/>
-							</div>
 							<Button
 								loading={isSubmitting}
 								disabled={!isValid || !dirty || isSubmitting}
 								type='submit'
 								floated='right'
 								positive
-								content='Create'
+								content='Add'
 							/>
 							<Button
 								disabled={isSubmitting}
@@ -94,4 +65,4 @@ const CreateProjectForm = () => {
 	);
 };
 
-export default CreateProjectForm;
+export default AddTodoForm;

@@ -1,5 +1,6 @@
-import { format } from "date-fns";
+import moment from "moment";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
 	Button,
@@ -9,11 +10,14 @@ import {
 	Icon,
 	Progress,
 } from "semantic-ui-react";
+import { deleteTask } from "../../actions/tasks";
+import { openModal } from "../../reducers/modal";
 import "./Task.css";
 
-const Task = ({ id, name, description, todos, startDate, endDate }) => {
-	const completedTodos = todos.map(todo => todo.completed === true);
-	const unCompletedTodos = todos.map(todo => todo.completed === false);
+const Task = ({ id, name, description, todos, startDate }) => {
+	const dispatch = useDispatch();
+	const completedTodos = todos.filter(todo => todo.completed === true);
+	const unCompletedTodos = todos.filter(todo => todo.completed === false);
 
 	const progress = (completedTodos.length / unCompletedTodos.length) * 100;
 
@@ -22,19 +26,30 @@ const Task = ({ id, name, description, todos, startDate, endDate }) => {
 			<Card.Content className='progress'>
 				<Card.Header>
 					<div className='cardHeader'>
-						<Header as={Link} to={`tasks/${id}`}>
+						<Header as={Link} to={`/tasks/${id}`}>
 							{name}
 						</Header>
 						<div className='cardHeader-right'>
 							<p style={{ fontSize: "14px" }}>
-								Created at{" "}
-								{format(Date.parse(startDate), "MMMM d, yyyy h:mm a")}
+								Created at {moment(startDate).format("MMMM d, yyyy h:mm a")}
 							</p>
 							<Dropdown className='icon' icon='ellipsis vertical'>
 								<Dropdown.Menu className='left'>
-									<Dropdown.Item>
+									<Dropdown.Item
+										onClick={() =>
+											dispatch(
+												openModal({
+													modalType: "EditProjectForm",
+													modalProps: { id },
+												})
+											)
+										}>
 										<Icon name='edit outline' />
 										<span className='text'>Edit</span>
+									</Dropdown.Item>
+									<Dropdown.Item onClick={() => dispatch(deleteTask(id))}>
+										<Icon name='trash' />
+										<span className='text'>Delete</span>
 									</Dropdown.Item>
 									<Dropdown.Item>
 										<Icon name='add circle' />

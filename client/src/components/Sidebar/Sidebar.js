@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import { Card, Divider, Image } from "semantic-ui-react";
 import Home from "../../screens/Home";
 import Login from "../../screens/Login";
-import CreateProjectForm from "../Form/CreateProjectForm";
+import FloatingButton from "../FloatingButton";
+import ModalManager from "../Modal/ModalManager";
 import TaskDetail from "../TaskOverview/TaskDetail";
 import "./Sidebar.css";
 
@@ -16,6 +17,7 @@ const Sidebar = () => {
 		<div className='main'>
 			{isAuth ? (
 				<Router>
+					<ModalManager />
 					<div className='sidebar'>
 						<ul>
 							<li>
@@ -62,12 +64,12 @@ const Sidebar = () => {
 					</div>
 					<div className='page-content'>
 						<div className='main-page-content'>
+							<FloatingButton />
 							<Route path='/' component={Home} exact />
 							<Route path='/projects' component={Home} exact />
 							<Route path='/chats' component={Home} exact />
 							<Route path='/reports' component={Home} exact />
 							<Route path='/tasks/:id' component={TaskDetail} exact />
-							<CreateProjectForm />
 						</div>
 					</div>
 					<div>

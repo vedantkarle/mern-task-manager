@@ -1,4 +1,4 @@
-import { format } from "date-fns/esm";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,20 +13,20 @@ import {
 	Message,
 	Segment,
 } from "semantic-ui-react";
-import { getTasks } from "../../actions/tasks";
+import { fetchSingleTask } from "../../actions/tasks";
+import { openModal } from "../../reducers/modal";
 import "./Task.css";
 
 const TaskDetail = ({ match }) => {
+	const id = match.params.id;
 	const dispatch = useDispatch();
-	const { tasks, loading, error } = useSelector(state => state.tasks);
-
-	const task = tasks.find(task => task._id === match.params.id);
+	const { task, loading, error } = useSelector(state => state.tasks);
 
 	useEffect(() => {
-		dispatch(getTasks());
+		dispatch(fetchSingleTask(id));
 	}, [dispatch]);
 
-	return loading && tasks.length <= 0 ? (
+	return loading && !task ? (
 		<Dimmer active>
 			<Loader>Loading</Loader>
 		</Dimmer>
@@ -37,16 +37,14 @@ const TaskDetail = ({ match }) => {
 					<Header as='h1'>{task?.projectName}</Header>
 					<div>
 						<Label color='blue' icon>
-							Created at
-							{format(Date.parse(task?.startDate), "MMMM d, yyyy h:mm a")}
+							Created at {moment(task?.startDate).format("MMMM d, yyyy h:mm a")}
 						</Label>
 						<Label color='yellow' icon>
-							Deadline
-							{format(Date.parse(task?.endDate), "MMMM d, yyyy h:mm a")}
+							Deadline {moment(task?.endDate).format("MMMM d, yyyy h:mm a")}
 						</Label>
 					</div>
 				</div>
-				<p>{task.description}</p>
+				<p>{task?.description}</p>
 			</Message>
 			<div className='task-content'>
 				<div className='todos'>
@@ -55,11 +53,11 @@ const TaskDetail = ({ match }) => {
 							<h2>Todos:</h2>
 						</Segment>
 						<Segment.Group>
-							{task.todos.length > 0 ? (
-								task.todos.map(todo => {
+							{task?.todos.length > 0 ? (
+								task?.todos.map(todo => {
 									return (
 										<Segment>
-											<Checkbox label={todo.description} />
+											<Checkbox label={todo?.description} />
 											<div className='todo-buttons'>
 												<div></div>
 												<div>
@@ -75,7 +73,15 @@ const TaskDetail = ({ match }) => {
 							)}
 						</Segment.Group>
 						<Segment>
-							<Button icon labelPosition='left' style={{ width: "140px" }}>
+							<Button
+								icon
+								labelPosition='left'
+								style={{ width: "140px" }}
+								onClick={() =>
+									dispatch(
+										openModal({ modalType: "AddTodoForm", modalProps: { id } })
+									)
+								}>
 								<Icon name='add' />
 								Add Todo
 							</Button>

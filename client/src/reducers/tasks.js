@@ -1,8 +1,9 @@
 const initialState = {
 	tasks: [],
-	task: {},
+	task: null,
 	loading: false,
 	error: null,
+	message: null,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -27,10 +28,31 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				task: payload,
 			};
+		case "UPDATE":
+			return {
+				...state,
+				tasks: state.tasks.map(task =>
+					task._id === payload.updatedTask._id ? payload.updatedTask : task
+				),
+				message: payload.message,
+			};
+		case "DELETE":
+			return {
+				...state,
+				tasks: state.tasks.filter(task => task._id !== payload.id),
+				message: payload.message,
+			};
 		case "CREATE":
 			return {
 				...state,
 				tasks: [...state.tasks, payload],
+			};
+		case "ADD_TODO":
+			return {
+				...state,
+				tasks: state.tasks.map(task =>
+					task._id === payload._id ? payload : task
+				),
 			};
 		case "SET_ERROR":
 			return {

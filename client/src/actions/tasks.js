@@ -32,11 +32,60 @@ export const createTask = values => async dispatch => {
 
 export const fetchSingleTask = id => async dispatch => {
 	try {
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: null });
 		dispatch({ type: "START_LOADING" });
 
 		const { data } = await api.fetchSingleTask(id);
 
+		console.log(data);
+
 		dispatch({ type: "FETCH_SINGLE_TASK", payload: data });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({ type: "SET_ERROR", payload: error.message });
+	}
+};
+
+export const updateTask = (id, task) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const {
+			data: { updatedTask, message },
+		} = await api.updateTask(id, task);
+
+		dispatch({ type: "UPDATE", payload: { updatedTask, message } });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({ type: "SET_ERROR", payload: error.message });
+	}
+};
+
+export const deleteTask = id => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const {
+			data: { message },
+		} = await api.deleteTask(id);
+
+		dispatch({ type: "DELETE", payload: { message, id } });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({ type: "SET_ERROR", payload: error.message });
+	}
+};
+
+export const addTodoToTask = (id, todo) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const { data } = await api.addTodo(id, todo);
+
+		dispatch({ type: "ADD_TODO", payload: data });
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
