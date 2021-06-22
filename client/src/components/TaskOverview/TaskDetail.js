@@ -57,7 +57,7 @@ const TaskDetail = ({ match }) => {
 								task?.todos.map(todo => {
 									const id = todo._id;
 									return (
-										<Segment>
+										<Segment key={id}>
 											<Checkbox label={todo?.description} />
 											<div className='todo-buttons'>
 												<div></div>

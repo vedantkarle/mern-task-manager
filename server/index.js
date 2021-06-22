@@ -3,10 +3,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config();
-const handleError = require("./errorHandler");
 
 const taskRoutes = require("./routes/tasks");
 const userRoutes = require("./routes/users");
+const tokenRoutes = require("./routes/tokens");
+const globalErrorHandler = require("./controllers/error");
 
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
@@ -14,16 +15,13 @@ app.use(cors());
 
 app.use("/tasks", taskRoutes);
 app.use("/users", userRoutes);
+app.use("/tokens", tokenRoutes);
 
-app.use("*", (req, res, next) => {
-	const error = new Error("404 Not Found");
-	error.status = 404;
-	next(error);
+app.all("*", (req, res, next) => {
+	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-app.use((err, req, res, next) => {
-	handleError(err, res);
-});
+app.use(globalErrorHandler);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 
@@ -43,5 +41,3 @@ mongoose
 	.catch(e => {
 		console.error(e.message);
 	});
-
-//JVrD7HOKPNjnG0F8

@@ -11,7 +11,13 @@ export const getTasks = () => async dispatch => {
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
 		console.log(error);
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -27,7 +33,13 @@ export const createTask = values => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -44,7 +56,13 @@ export const fetchSingleTask = id => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -61,7 +79,13 @@ export const updateTask = (id, task) => async dispatch => {
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
 		console.log(error);
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -77,7 +101,13 @@ export const deleteTask = id => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -93,7 +123,13 @@ export const addTodoToTask = (id, todo) => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -109,7 +145,13 @@ export const editTodo = (taskId, todoId, todo) => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };
 
@@ -127,6 +169,12 @@ export const deleteTodo = (taskId, todoId) => async dispatch => {
 
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
-		dispatch({ type: "SET_ERROR", payload: error.message });
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
 	}
 };

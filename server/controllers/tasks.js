@@ -1,8 +1,9 @@
 const Task = require("../models/taskModel");
 const mongoose = require("mongoose");
 const Todo = require("../models/todoModel");
+const asyncHandler = require("express-async-handler");
 
-exports.getTasks = async (req, res) => {
+exports.getTasks = asyncHandler(async (req, res) => {
 	try {
 		const tasks = await Task.find().populate("todos");
 
@@ -11,9 +12,9 @@ exports.getTasks = async (req, res) => {
 		console.log(error);
 		res.status(404).json({ message: error.message });
 	}
-};
+});
 
-exports.getSingleTask = async (req, res) => {
+exports.getSingleTask = asyncHandler(async (req, res) => {
 	try {
 		const { id: _id } = req.params;
 
@@ -26,9 +27,9 @@ exports.getSingleTask = async (req, res) => {
 	} catch (error) {
 		res.status(404).json({ message: error.message });
 	}
-};
+});
 
-exports.createTask = async (req, res) => {
+exports.createTask = asyncHandler(async (req, res) => {
 	const task = req.body;
 
 	try {
@@ -39,9 +40,9 @@ exports.createTask = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});
 
-exports.updateTask = async (req, res) => {
+exports.updateTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	try {
 		const task = req.body;
@@ -56,9 +57,9 @@ exports.updateTask = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});
 
-exports.deleteTask = async (req, res) => {
+exports.deleteTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 
 	try {
@@ -72,9 +73,9 @@ exports.deleteTask = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});
 
-exports.addTodo = async (req, res) => {
+exports.addTodo = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	const todoBody = req.body;
 	try {
@@ -95,9 +96,9 @@ exports.addTodo = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});
 
-exports.editTodo = async (req, res) => {
+exports.editTodo = asyncHandler(async (req, res) => {
 	const { todoId, taskId } = req.params;
 	try {
 		const newTodo = req.body;
@@ -128,9 +129,9 @@ exports.editTodo = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});
 
-exports.deleteTodo = async (req, res) => {
+exports.deleteTodo = asyncHandler(async (req, res) => {
 	const { taskId, todoId } = req.params;
 
 	try {
@@ -156,4 +157,4 @@ exports.deleteTodo = async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
-};
+});

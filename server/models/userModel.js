@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema(
 		password: { type: String, required: true, minlength: 8 },
 		photoUrl: { type: String },
 		verified: { type: Boolean, default: false },
+		refreshToken: {
+			token: { type: String, maxlength: 500, default: "" },
+			createdAt: { type: Date, required: true, default: Date.now() },
+		},
 	},
 	{ timestamp: true }
 );
