@@ -12,6 +12,7 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				loading: true,
+				error: null,
 			};
 		case "END_LOADING":
 			return {
@@ -64,6 +65,7 @@ export default (state = initialState, { type, payload }) => {
 		case "SET_ERROR":
 			return {
 				...state,
+				loading: false,
 				error: payload,
 			};
 		default:

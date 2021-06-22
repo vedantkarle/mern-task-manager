@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Card, Divider, Image } from "semantic-ui-react";
 import Home from "../../screens/Home";
 import Login from "../../screens/Login";
+import ErrorComponent from "../Error/ErrorComponent";
 import FloatingButton from "../FloatingButton";
 import ModalManager from "../Modal/ModalManager";
 import TaskDetail from "../TaskOverview/TaskDetail";
@@ -65,11 +66,15 @@ const Sidebar = () => {
 					<div className='page-content'>
 						<div className='main-page-content'>
 							<FloatingButton />
-							<Route path='/' component={Home} exact />
-							<Route path='/projects' component={Home} exact />
-							<Route path='/chats' component={Home} exact />
-							<Route path='/reports' component={Home} exact />
-							<Route path='/tasks/:id' component={TaskDetail} exact />
+							<Switch>
+								<Route path='/' component={Home} exact />
+								<Route path='/projects' component={Home} exact />
+								<Route path='/chats' component={Home} exact />
+								<Route path='/reports' component={Home} exact />
+								<Route path='/tasks/:id' component={TaskDetail} exact />
+								<Route path='/error' component={ErrorComponent} exact />
+								<Route path='*' component={ErrorComponent} exact />
+							</Switch>
 						</div>
 					</div>
 					<div>

@@ -9,6 +9,8 @@ const Navbar = () => {
 				<a className='item'>
 					<Icon name='bell' />
 				</a>
+				<a className='item'>Login</a>
+				<a className='item'>Register</a>
 				<a className='item'>Logout</a>
 			</div>
 		</div>

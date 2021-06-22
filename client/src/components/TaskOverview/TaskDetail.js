@@ -1,20 +1,20 @@
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
 	Button,
 	Checkbox,
-	Dimmer,
 	Feed,
 	Header,
 	Icon,
 	Label,
-	Loader,
 	Message,
 	Segment,
 } from "semantic-ui-react";
 import { deleteTodo, fetchSingleTask } from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
+import LoadingComponent from "../LoadingComponent";
 import "./Task.css";
 
 const TaskDetail = ({ match }) => {
@@ -26,11 +26,11 @@ const TaskDetail = ({ match }) => {
 		dispatch(fetchSingleTask(id));
 	}, [dispatch]);
 
-	return loading && !task ? (
-		<Dimmer active>
-			<Loader>Loading</Loader>
-		</Dimmer>
-	) : (
+	if (loading && !task && !error) return <LoadingComponent />;
+
+	if (error) return <Redirect to='/error' />;
+
+	return (
 		<div>
 			<Message>
 				<div className='task-header'>

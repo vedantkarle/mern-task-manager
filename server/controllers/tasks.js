@@ -18,13 +18,12 @@ exports.getSingleTask = async (req, res) => {
 		const { id: _id } = req.params;
 
 		if (!mongoose.Types.ObjectId.isValid(_id))
-			return res.status(404).json({ message: "No post with that id" });
+			return res.status(404).json({ message: "No task with that id" });
 
 		const task = await Task.findById(_id).populate("todos");
 
 		res.status(200).json(task);
 	} catch (error) {
-		console.log(error);
 		res.status(404).json({ message: error.message });
 	}
 };
