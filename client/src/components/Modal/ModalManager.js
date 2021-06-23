@@ -4,7 +4,6 @@ import AddTodoForm from "../Form/AddTodoForm";
 import CreateProjectForm from "../Form/CreateProjectForm";
 import EditProjectForm from "../Form/EditProjectForm";
 import EditTodoForm from "../Form/EditTodoForm";
-import Login from "../Form/Login";
 
 const ModalManager = () => {
 	const modalLookup = {
@@ -12,7 +11,6 @@ const ModalManager = () => {
 		EditProjectForm,
 		AddTodoForm,
 		EditTodoForm,
-		Login,
 	};
 	const currentModal = useSelector(state => state.modals);
 	let renderedModal;

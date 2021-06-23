@@ -4,19 +4,18 @@ export const login = values => async dispatch => {
 	try {
 		dispatch({ type: "START_AUTH_LOADING" });
 
-		const res = await api.login(values);
-
-		if (res.status === 200) {
-			sessionStorage.setItem("accessToken", res.data.accessToken);
-			localStorage.setItem(
-				"tasky",
-				JSON.stringify({ refreshToken: res.data.refreshToken })
-			);
-		}
-
-		const userRes = await api.getUserData();
-
-		console.log(userRes);
+		api.login(values).then(res => {
+			if (res.status === 200) {
+				sessionStorage.setItem("accessToken", res.data.accessToken);
+				localStorage.setItem(
+					"tasky",
+					JSON.stringify({ refreshToken: res.data.refreshToken })
+				);
+			}
+			api.getUserData().then(res => {
+				dispatch({ type: "LOGIN", payload: res.data });
+			});
+		});
 
 		dispatch({ type: "END_AUTH_LOADING" });
 	} catch (error) {

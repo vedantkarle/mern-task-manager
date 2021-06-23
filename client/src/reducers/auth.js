@@ -23,8 +23,12 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				isAuth: true,
-				user: payload.user,
-				message: payload.message,
+				user: {
+					id: payload._id,
+					name: payload.name,
+					email: payload.email,
+					verified: payload.verified,
+				},
 			};
 		case "REGISTER":
 			return {

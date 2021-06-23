@@ -1,48 +1,72 @@
 import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Button } from "semantic-ui-react";
+import { Button, Grid, Header, Message, Segment } from "semantic-ui-react";
 import * as Yup from "yup";
 import { login } from "../../actions/auth";
-import ModalWrapper from "../Modal/ModalWrapper";
 import TextInput from "./TextInput";
 
 const Login = () => {
 	const dispatch = useDispatch();
 
 	return (
-		<ModalWrapper size='mini' header='LOGIN'>
-			<Formik
-				initialValues={{
-					email: "",
-					password: "",
-				}}
-				validationSchema={Yup.object({
-					email: Yup.string().required("Email is required").email(),
-					password: Yup.string().required("Password is required").min(8),
-				})}
-				onSubmit={(values, { setSubmitting }) => {
-					dispatch(login(values));
-					setSubmitting(false);
-					// dispatch(closeModal());
-				}}>
-				{({ isSubmitting, isValid, dirty }) => (
-					<Form className='ui form'>
-						<TextInput name='email' placeholder='Email Address' />
-						<TextInput name='password' placeholder='Password' type='password' />
-						<Button
-							loading={isSubmitting}
-							disabled={!isValid || !dirty || isSubmitting}
-							type='submit'
-							fluid
-							size='large'
-							color='primary'
-							content='Login'
-						/>
-					</Form>
-				)}
-			</Formik>
-		</ModalWrapper>
+		<Grid
+			textAlign='center'
+			style={{ height: "100vh", width: "100vw" }}
+			verticalAlign='middle'>
+			<Grid.Column style={{ maxWidth: 450 }}>
+				<Header as='h2' color='teal' textAlign='center'>
+					Log-in to your account
+				</Header>
+				<Segment>
+					<Formik
+						initialValues={{
+							email: "",
+							password: "",
+						}}
+						validationSchema={Yup.object({
+							email: Yup.string().required("Email is required").email(),
+							password: Yup.string().required("Password is required").min(8),
+						})}
+						onSubmit={(values, { setSubmitting }) => {
+							dispatch(login(values));
+							setSubmitting(false);
+						}}>
+						{({ isSubmitting, isValid, dirty }) => (
+							<Form className='ui form'>
+								<TextInput
+									name='email'
+									fluid
+									icon='user'
+									iconPosition='left'
+									placeholder='E-mail address'
+								/>
+								<TextInput
+									name='password'
+									placeholder='Password'
+									type='password'
+									fluid
+									icon='lock'
+									iconPosition='left'
+								/>
+								<Button
+									loading={isSubmitting}
+									disabled={!isValid || !dirty || isSubmitting}
+									type='submit'
+									fluid
+									size='large'
+									color='primary'
+									content='Login'
+								/>
+							</Form>
+						)}
+					</Formik>
+				</Segment>
+				<Message>
+					New to us? <a href='#'>Sign Up</a>
+				</Message>
+			</Grid.Column>
+		</Grid>
 	);
 };
 

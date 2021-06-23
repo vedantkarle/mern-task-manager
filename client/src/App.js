@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 
 const App = () => {
+	const dispatch = useDispatch();
 	const { error, message } = useSelector(state => state.tasks);
 
 	useEffect(() => {

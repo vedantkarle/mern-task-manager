@@ -1,6 +1,6 @@
 import { useField } from "formik";
 import React from "react";
-import { FormField, Label } from "semantic-ui-react";
+import { FormField, FormInput, Label } from "semantic-ui-react";
 
 const TextInput = ({ label, ...props }) => {
 	const [field, meta] = useField(props);
@@ -8,7 +8,7 @@ const TextInput = ({ label, ...props }) => {
 	return (
 		<FormField error={meta.touched && !!meta.error}>
 			<label>{label}</label>
-			<input {...field} {...props} />
+			<FormInput {...field} {...props} />
 			{meta.touched && meta.error ? (
 				<Label basic color='red'>
 					{meta.error}
