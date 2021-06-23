@@ -20,3 +20,13 @@ export const editTodo = (todoId, taskId, todo) =>
 
 export const deleteTodo = (taskId, todoId) =>
 	axios.delete(`${url}/${taskId}/todo/${todoId}`);
+
+export const login = data =>
+	axios.post("http://localhost:5000/user/login", data);
+
+export const getUserData = token =>
+	axios.get("http://localhost:5000/user", {
+		headers: {
+			Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+		},
+	});

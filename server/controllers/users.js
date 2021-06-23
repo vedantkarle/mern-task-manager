@@ -69,6 +69,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
 	const { email, password } = req.body;
+	let match;
 	try {
 		if (!email || !password) {
 			return res.status(400).json({ message: "All fields are required!" });
@@ -76,7 +77,9 @@ exports.login = async (req, res) => {
 
 		const user = await User.findOne({ email });
 
-		const match = await bcrypt.compare(password, user.password);
+		if (user) {
+			match = await bcrypt.compare(password, user.password);
+		}
 
 		if (!user || !match) {
 			return res.status(404).json({ message: "Invalid Credentials!" });
@@ -96,6 +99,7 @@ exports.login = async (req, res) => {
 			.status(200)
 			.json({ message: "Login successful", accessToken, refreshToken });
 	} catch (error) {
+		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
 };

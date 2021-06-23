@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/tasks", taskRoutes);
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 app.use("/tokens", tokenRoutes);
 
 app.all("*", (req, res, next) => {
