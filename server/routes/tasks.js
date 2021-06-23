@@ -12,8 +12,8 @@ const {
 const router = express.Router();
 const { isAuthorized } = require("../middlewares/auth");
 
-router.get("/", getTasks);
-router.get("/:id", getSingleTask);
+router.get("/", isAuthorized, getTasks);
+router.get("/:id", isAuthorized, getSingleTask);
 router.post("/", isAuthorized, createTask);
 router.patch("/:id", isAuthorized, updateTask);
 router.delete("/:id", isAuthorized, deleteTask);

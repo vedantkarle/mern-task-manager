@@ -22,7 +22,6 @@ export default (state = initialState, { type, payload }) => {
 		case "LOGIN":
 			return {
 				...state,
-				isAuth: true,
 				user: {
 					id: payload._id,
 					name: payload.name,
@@ -30,11 +29,20 @@ export default (state = initialState, { type, payload }) => {
 					verified: payload.verified,
 				},
 			};
-		case "REGISTER":
+		case "AUTH_SUCCESS":
 			return {
 				...state,
 				isAuth: true,
-				user: payload,
+			};
+		case "REGISTER":
+			return {
+				...state,
+				user: {
+					id: payload._id,
+					name: payload.name,
+					email: payload.email,
+					verified: payload.verified,
+				},
 			};
 		case "SET_AUTH_ERROR":
 			return {

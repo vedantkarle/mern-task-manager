@@ -8,6 +8,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 const App = () => {
 	const dispatch = useDispatch();
 	const { error, message } = useSelector(state => state.tasks);
+	const { isAuth } = useSelector(state => state.auth);
 
 	useEffect(() => {
 		if (error) {
@@ -16,7 +17,14 @@ const App = () => {
 		if (message) {
 			toast.success(message);
 		}
-	});
+		if (localStorage.getItem("user") && sessionStorage.getItem("accessToken")) {
+			dispatch({
+				type: "LOGIN",
+				payload: { ...JSON.parse(localStorage.getItem("user")) },
+			});
+			dispatch({ type: "AUTH_SUCCESS" });
+		}
+	}, [isAuth, error, message]);
 
 	return (
 		<>

@@ -14,6 +14,8 @@ export const login = values => async dispatch => {
 			}
 			api.getUserData().then(res => {
 				dispatch({ type: "LOGIN", payload: res.data });
+				localStorage.setItem("user", JSON.stringify({ ...res?.data }));
+				dispatch({ type: "AUTH_SUCCESS" });
 			});
 		});
 

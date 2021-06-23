@@ -13,9 +13,9 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use("/tasks", taskRoutes);
-app.use("/user", userRoutes);
-app.use("/tokens", tokenRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/tokens", tokenRoutes);
 
 app.all("*", (req, res, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

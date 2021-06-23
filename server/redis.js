@@ -5,6 +5,7 @@ const setJWT = async (key, value) => {
 	try {
 		client.set(key, value, (err, result) => {
 			if (err) return err;
+			console.log(result);
 			return result;
 		});
 	} catch (error) {
@@ -17,6 +18,7 @@ const getJWT = async key => {
 		try {
 			client.get(key, (err, result) => {
 				if (err) reject(err);
+				console.log(result);
 				resolve(result);
 			});
 		} catch (error) {
