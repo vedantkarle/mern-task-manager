@@ -1,0 +1,32 @@
+.membersPageContainer{
+    flex:1;
+    display:flex;
+    flex-direction: column;
+    min-height:0;
+    width: 100%;
+}
+
+.titleBar {
+    border-bottom: 1px solid #cacaca;
+    border-top: 1px solid #cacaca;
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding:10px;
+}
+
+.titleBar label {
+    margin:0 10px 0 0;
+}
+
+#userSearchTextBox{
+    border: none;
+    outline: none;
+    flex: 1;
+    font-weight: 200px;
+    min-width: 600px;
+}
+
+.createChatButton{
+   
+}

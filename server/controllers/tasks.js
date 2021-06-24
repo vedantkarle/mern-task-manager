@@ -5,7 +5,7 @@ const asyncHandler = require("express-async-handler");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
-		const tasks = await Task.find({ ownerId: req.userId }).populate("todos");
+		const tasks = await Task.find({ owner: req.user._id }).populate("todos");
 
 		res.status(200).json(tasks);
 	} catch (error) {
@@ -33,9 +33,9 @@ exports.createTask = asyncHandler(async (req, res) => {
 	const task = req.body;
 
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
-		const newTask = await Task.create({ ...task, owner: req.userId });
+		const newTask = await Task.create({ ...task, owner: req.user._id });
 
 		res.status(201).json(newTask);
 	} catch (error) {
@@ -47,7 +47,7 @@ exports.createTask = asyncHandler(async (req, res) => {
 exports.updateTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		const task = req.body;
 
@@ -67,7 +67,7 @@ exports.deleteTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
@@ -85,7 +85,7 @@ exports.addTodo = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	const todoBody = req.body;
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		let task = await Task.findById(_id);
 
@@ -109,7 +109,7 @@ exports.addTodo = asyncHandler(async (req, res) => {
 exports.editTodo = asyncHandler(async (req, res) => {
 	const { todoId, taskId } = req.params;
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		const newTodo = req.body;
 
@@ -145,7 +145,7 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 	const { taskId, todoId } = req.params;
 
 	try {
-		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		if (!mongoose.Types.ObjectId.isValid(todoId))
 			return res.status(404).json({ message: "No task with that id" });
@@ -167,6 +167,27 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 		res.json({ task, message: "Todo deleted successfully" });
 	} catch (error) {
 		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
+exports.addMembers = asyncHandler(async (req, res) => {
+	const { id } = req.params;
+	try {
+		const member = req.body;
+
+		let task = await Task.findById(id);
+
+		task = await Task.findByIdAndUpdate(
+			_id,
+			{
+				$push: { members: member._id },
+			},
+			{ new: true }
+		).populate("todos");
+
+		res.json(task);
+	} catch (error) {
 		res.status(400).json({ message: error.message });
 	}
 });

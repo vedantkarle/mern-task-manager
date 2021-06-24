@@ -51,7 +51,10 @@ const Task = ({ id, name, description, todos, startDate }) => {
 										<Icon name='trash' />
 										<span className='text'>Delete</span>
 									</Dropdown.Item>
-									<Dropdown.Item>
+									<Dropdown.Item
+										onClick={() =>
+											dispatch(openModal({ modalType: "SearchMembers" }))
+										}>
 										<Icon name='add circle' />
 										<span className='text'>Add Members</span>
 									</Dropdown.Item>

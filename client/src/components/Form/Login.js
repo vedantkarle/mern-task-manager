@@ -1,20 +1,25 @@
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
-import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button, Grid, Header, Message, Segment } from "semantic-ui-react";
 import * as Yup from "yup";
-import { login } from "../../actions/auth";
+import { addGoogleUser, login } from "../../actions/auth";
 import TextInput from "./TextInput";
 
 const Login = ({ history }) => {
 	const dispatch = useDispatch();
 	const user = JSON.parse(localStorage.getItem("profile"));
+	const { error, loading } = useSelector(state => state.tasks);
 
 	useEffect(() => {
-		if (user) {
+		if (user && !error) {
 			history.push("/");
+		}
+		if (error) {
+			toast.error(error);
 		}
 	}, [user]);
 
@@ -23,6 +28,14 @@ const Login = ({ history }) => {
 		const token = res?.tokenId;
 		try {
 			dispatch({ type: "AUTH", data: { result, token } });
+			dispatch(
+				addGoogleUser({
+					name: result.name,
+					email: result.email,
+					verified: true,
+					userType: "google",
+				})
+			);
 			history.push("/");
 		} catch (error) {
 			console.log(error);
@@ -75,8 +88,8 @@ const Login = ({ history }) => {
 									iconPosition='left'
 								/>
 								<Button
-									loading={isSubmitting}
-									disabled={!isValid || !dirty || isSubmitting}
+									loading={loading}
+									disabled={!isValid || !dirty || loading}
 									type='submit'
 									fluid
 									size='large'

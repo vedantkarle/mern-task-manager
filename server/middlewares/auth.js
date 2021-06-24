@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 
-exports.isAuth = (req, res, next) => {
+exports.isAuth = async (req, res, next) => {
 	try {
 		const token = req.headers.authorization.split(" ")[1];
 
@@ -11,11 +12,11 @@ exports.isAuth = (req, res, next) => {
 		if (token && isCustomAuth) {
 			decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-			req.userId = decodedData?.id;
+			req.user = await User.findOne({ email: decodedData?.email });
 		} else {
 			decodedData = jwt.decode(token);
 
-			req.userId = decodedData?.sub;
+			req.user = await User.findOne({ email: decodedData?.email });
 		}
 
 		next();

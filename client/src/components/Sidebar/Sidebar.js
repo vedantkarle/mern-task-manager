@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { Card, Divider, Image } from "semantic-ui-react";
 import Home from "../../screens/Home";
@@ -16,13 +17,24 @@ const Sidebar = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const [active, setActive] = useState("today");
+	const { error, message } = useSelector(state => state.tasks);
 
 	const user = JSON.parse(localStorage.getItem("profile"));
 
 	const logout = () => {
 		dispatch({ type: "LOGOUT" });
+		dispatch({ type: "CLEAR_ERROR" });
 		history.push("/");
 	};
+
+	useEffect(() => {
+		if (error) {
+			toast.error(error);
+		}
+		if (message) {
+			toast.success(message);
+		}
+	}, [error, message]);
 
 	return (
 		<div className='main'>
@@ -103,26 +115,36 @@ const Sidebar = () => {
 					</Switch>
 				</div>
 			</div>
-			<div>
-				<Card style={{ borderRadius: "10px", margin: "10px" }}>
-					<Card.Content>
-						<Card.Header
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-							}}>
-							<Image size='small' src={user?.result?.imageUrl} circular />
-							<h3>Hello,{user?.result?.name}</h3>
-						</Card.Header>
-						<Divider />
-						<Card.Description>
-							Matthew is a musician living in Nashville.
-						</Card.Description>
-					</Card.Content>
-				</Card>
-			</div>
+			{user && (
+				<div>
+					<Card style={{ borderRadius: "10px", margin: "10px" }}>
+						<Card.Content>
+							<Card.Header
+								style={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									justifyContent: "center",
+								}}>
+								<Image
+									size='small'
+									src={
+										user?.result?.imageUrl != null
+											? user?.result?.imageUrl
+											: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
+									}
+									circular
+								/>
+								<h3>Hello,{user?.result?.name}</h3>
+							</Card.Header>
+							<Divider />
+							<Card.Description>
+								Matthew is a musician living in Nashville.
+							</Card.Description>
+						</Card.Content>
+					</Card>
+				</div>
+			)}
 			)
 		</div>
 	);

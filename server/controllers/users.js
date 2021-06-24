@@ -65,3 +65,42 @@ exports.register = async (req, res) => {
 		res.status(404).json({ message: "Something went wrong!" });
 	}
 };
+
+exports.addGoogleUserToDb = asyncHandler(async (req, res) => {
+	try {
+		const user = req.body;
+
+		const existingUser = await User.findOne({ email: user.email });
+
+		if (existingUser) {
+			return res.status(200).json({ message: "Welcome Back!" });
+		}
+
+		const newUser = await User.create(user);
+		console.log(newUser);
+		res.status(200).json({ message: "Welcome To Tasky!" });
+	} catch (error) {
+		res.status(404).json({ message: "Something went wrong!" });
+	}
+});
+
+exports.getUsers = asyncHandler(async (req, res) => {
+	var searchObj = req.query;
+	try {
+		if (req.query.search !== undefined) {
+			searchObj = {
+				$or: [
+					{ name: { $regex: searchObj.search, $options: "i" } },
+					{ email: { $regex: searchObj.search, $options: "i" } },
+				],
+			};
+		}
+
+		const users = await User.find(searchObj);
+
+		res.status(200).json(users);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});

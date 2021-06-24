@@ -1,20 +1,26 @@
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button, Grid, Header, Message, Segment } from "semantic-ui-react";
 import * as Yup from "yup";
+import { register } from "../../actions/auth";
 import TextInput from "./TextInput";
 
 const Register = ({ history }) => {
 	const dispatch = useDispatch();
-	const { isAuth } = useSelector(state => state.auth);
+	const user = JSON.parse(localStorage.getItem("profile"));
+	const { error, loading } = useSelector(state => state.tasks);
 
 	useEffect(() => {
-		if (isAuth) {
+		if (user && !error) {
 			history.push("/");
 		}
-	}, [isAuth]);
+		if (error) {
+			toast.error(error);
+		}
+	}, [user]);
 
 	return (
 		<Grid
@@ -38,6 +44,7 @@ const Register = ({ history }) => {
 							password: Yup.string().required("Password is required").min(8),
 						})}
 						onSubmit={(values, { setSubmitting }) => {
+							dispatch(register(values, history));
 							setSubmitting(false);
 						}}>
 						{({ isSubmitting, isValid, dirty }) => (
@@ -65,8 +72,8 @@ const Register = ({ history }) => {
 									iconPosition='left'
 								/>
 								<Button
-									loading={isSubmitting}
-									disabled={!isValid || !dirty || isSubmitting}
+									loading={loading}
+									disabled={!isValid || !dirty || loading}
 									type='submit'
 									fluid
 									size='large'

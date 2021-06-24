@@ -1,25 +1,36 @@
+import decode from "jwt-decode";
 import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import { getTasks } from "./actions/tasks";
 import "./App.css";
 import Sidebar from "./components/Sidebar/Sidebar";
 
 const App = () => {
 	const dispatch = useDispatch();
-	const { error, message } = useSelector(state => state.tasks);
+	const history = useHistory();
+	const user = JSON.parse(localStorage.getItem("profile"));
 
 	useEffect(() => {
-		if (error) {
-			toast.error(error);
-		}
-		if (message) {
-			toast.success(message);
-		}
-		// const token = user?.token;
+		if (user) {
+			const result = user.result;
+			const token = user.token;
 
-		// setUser(JSON.parse(localStorage.getItem("profile")));
-	}, [error, message]);
+			if (token) {
+				const decodedToken = decode(token);
+				if (decodedToken.exp * 1000 < new Date().getTime()) {
+					dispatch({ type: "LOGOUT" });
+					dispatch({ type: "CLEAR_ERROR" });
+					history.push("/");
+				}
+			}
+
+			dispatch({ type: "AUTH", data: { result, token } });
+
+			dispatch(getTasks());
+		}
+	}, [dispatch]);
 
 	return (
 		<Router>

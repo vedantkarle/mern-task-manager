@@ -67,6 +67,18 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				loading: false,
 				error: payload,
+				message: null,
+			};
+		case "CLEAR_ERROR":
+			return {
+				...state,
+				error: null,
+			};
+		case "SET_MESSAGE":
+			return {
+				...state,
+				message: payload.message,
+				error: null,
 			};
 		default:
 			return state;
