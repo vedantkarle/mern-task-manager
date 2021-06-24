@@ -1,5 +1,4 @@
 .main {
-  margin-top:70px;
   display: flex;
   flex: 1;
 }
@@ -14,7 +13,7 @@
   .sidebar ul {
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    /* padding: 5px; */
   }
   .sidebar ul li {
     display: flex;

@@ -1,27 +1,25 @@
 const jwt = require("jsonwebtoken");
-const { getJWT, deleteJWT } = require("../redis");
 
-exports.isAuthorized = async (req, res, next) => {
+exports.isAuth = (req, res, next) => {
 	try {
-		const { authorization } = req.headers;
-		const token = authorization.split("Bearer ")[1];
+		const token = req.headers.authorization.split(" ")[1];
 
-		const decoded = await jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+		const isCustomAuth = token.length < 500;
 
-		if (decoded.email) {
-			const userId = await getJWT(token);
+		let decodedData;
 
-			if (!userId) {
-				return res.status(403).json({ message: "You must be logged in!" });
-			}
+		if (token && isCustomAuth) {
+			decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-			req.userId = userId;
+			req.userId = decodedData?.id;
+		} else {
+			decodedData = jwt.decode(token);
 
-			next();
+			req.userId = decodedData?.sub;
 		}
 
-		deleteJWT(token);
+		next();
 	} catch (error) {
-		res.status(403).json({ message: "You must be logged in!" });
+		res.status(403).json({ message: "You need to be logged in!" });
 	}
 };

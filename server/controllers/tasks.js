@@ -5,7 +5,7 @@ const asyncHandler = require("express-async-handler");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
-		const tasks = await Task.find().populate("todos");
+		const tasks = await Task.find({ ownerId: req.userId }).populate("todos");
 
 		res.status(200).json(tasks);
 	} catch (error) {
@@ -33,7 +33,9 @@ exports.createTask = asyncHandler(async (req, res) => {
 	const task = req.body;
 
 	try {
-		const newTask = await Task.create(task);
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
+		const newTask = await Task.create({ ...task, owner: req.userId });
 
 		res.status(201).json(newTask);
 	} catch (error) {
@@ -45,6 +47,8 @@ exports.createTask = asyncHandler(async (req, res) => {
 exports.updateTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	try {
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
 		const task = req.body;
 
 		if (!mongoose.Types.ObjectId.isValid(_id))
@@ -63,6 +67,8 @@ exports.deleteTask = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 
 	try {
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
 
@@ -79,6 +85,8 @@ exports.addTodo = asyncHandler(async (req, res) => {
 	const { id: _id } = req.params;
 	const todoBody = req.body;
 	try {
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
 		let task = await Task.findById(_id);
 
 		const todo = await Todo.create(todoBody);
@@ -101,6 +109,8 @@ exports.addTodo = asyncHandler(async (req, res) => {
 exports.editTodo = asyncHandler(async (req, res) => {
 	const { todoId, taskId } = req.params;
 	try {
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
 		const newTodo = req.body;
 
 		if (!mongoose.Types.ObjectId.isValid(todoId))
@@ -135,6 +145,8 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 	const { taskId, todoId } = req.params;
 
 	try {
+		if (!req.userId) return res.status(403).json({ message: "Unauthorized!" });
+
 		if (!mongoose.Types.ObjectId.isValid(todoId))
 			return res.status(404).json({ message: "No task with that id" });
 

@@ -1,14 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 
-const PrivateRoute = ({ children, ...props }) => {
-	const { isAuth } = useSelector(state => state.auth);
+const PrivateRoute = ({ component: Component, ...rest }) => {
+	const user = JSON.parse(localStorage.getItem("profile"));
 
 	return (
 		<Route
-			{...props}
-			render={() => (isAuth ? children : <Redirect to='/login' />)}
+			{...rest}
+			render={props =>
+				user ? <Component {...props} /> : <Redirect to='/login' />
+			}
 		/>
 	);
 };

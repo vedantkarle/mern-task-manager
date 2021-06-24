@@ -10,15 +10,15 @@ const {
 	deleteTodo,
 } = require("../controllers/tasks");
 const router = express.Router();
-const { isAuthorized } = require("../middlewares/auth");
+const { isAuth } = require("../middlewares/auth");
 
-router.get("/", isAuthorized, getTasks);
-router.get("/:id", isAuthorized, getSingleTask);
-router.post("/", isAuthorized, createTask);
-router.patch("/:id", isAuthorized, updateTask);
-router.delete("/:id", isAuthorized, deleteTask);
-router.post("/:id/todo", isAuthorized, addTodo);
-router.patch("/:taskId/todo/:todoId", isAuthorized, editTodo);
-router.delete("/:taskId/todo/:todoId", isAuthorized, deleteTodo);
+router.get("/", isAuth, getTasks);
+router.get("/:id", isAuth, getSingleTask);
+router.post("/", isAuth, createTask);
+router.patch("/:id", isAuth, updateTask);
+router.delete("/:id", isAuth, deleteTask);
+router.post("/:id/todo", isAuth, addTodo);
+router.patch("/:taskId/todo/:todoId", isAuth, editTodo);
+router.delete("/:taskId/todo/:todoId", isAuth, deleteTodo);
 
 module.exports = router;
