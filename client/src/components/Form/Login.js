@@ -32,6 +32,7 @@ const Login = ({ history }) => {
 				addGoogleUser({
 					name: result.name,
 					email: result.email,
+					photoUrl: result.imageUrl,
 					verified: true,
 					userType: "google",
 				})

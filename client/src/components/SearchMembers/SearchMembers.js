@@ -10,8 +10,9 @@ const SearchMembers = () => {
 
 	var timer;
 	var val;
-	var selectedUsers = [];
 	const [users, setUsers] = useState([]);
+	const [selectedUsers, setSelectedUsers] = useState([]);
+	const [disabled, setDisabled] = useState(true);
 
 	const handleChange = e => {
 		clearTimeout(timer);
@@ -22,7 +23,7 @@ const SearchMembers = () => {
 			val = e.target.value.trim();
 
 			if (val == "") {
-				document.querySelector(".resultsContainer").innerHTML = "";
+				setUsers([]);
 			} else {
 				searchUsers(val);
 			}
@@ -43,46 +44,35 @@ const SearchMembers = () => {
 				}
 			);
 
-			// outputResults(data, document.querySelector(".resultsContainer"));
-			setUsers(data);
+			const results = data.filter(user => user.email !== authData.result.email);
+
+			setUsers(results);
 		} catch (error) {}
 	};
 
-	const outputResults = (results, container) => {
-		container.innerHTML = "";
-		results.forEach(result => {
-			if (result.name == authData.result.name) {
-				return;
-			}
-			var html = createUserHtml(result);
-			container.append(html);
-		});
+	const userSelected = user => {
+		setSelectedUsers([...selectedUsers, user]);
+		setUsers([]);
+		setDisabled(false);
 	};
 
-	function createUserHtml(userData) {
-		let name = userData.name;
+	// const updateSelectedUsers = () => {
 
-		return (
-			<div className='user'>
-				<div className='userImageContainer'>
-					<img src={userData.profilePic != null ? userData.profilePic : null} />
-				</div>
-				<div className='userDetailsContainer'>
-					<div className='header'>
-						<a href='/profile/${userData.username}'>{name}</a>
-						<span className='username'>{userData.email}</span>
-					</div>
-				</div>
-			</div>
-		);
-	}
+	// }
 
 	return (
 		<ModalWrapper header='Add Members'>
 			<div className='membersPageContainer'>
 				<div className='titleBar'>
-					<label for='userSearchTextBox'>Users:</label>
+					<label htmlFor='userSearchTextBox'>Users:</label>
 					<div id='selectedUsers'>
+						{selectedUsers.map(user => {
+							return (
+								<span key={user._id} className='selectedUser'>
+									{user.name}
+								</span>
+							);
+						})}
 						<input
 							type='text'
 							name=''
@@ -94,14 +84,18 @@ const SearchMembers = () => {
 				</div>
 				<div className='resultsContainer'>
 					{users.map(user => {
-						return user.name == authData.result.name ? null : (
-							<div className='user' key={user._id}>
+						return user.email == authData.result.email ||
+							selectedUsers.some(u => u._id == user._id) ? null : (
+							<div
+								className='user'
+								key={user._id}
+								onClick={() => userSelected(user)}>
 								<div className='userImageContainer'>
-									<img src={user.profilePic != null ? user.profilePic : null} />
+									<img src={user?.photoUrl} />
 								</div>
 								<div className='userDetailsContainer'>
 									<div className='header'>
-										<a href='/profile/${userData.username}'>{user.name}</a>
+										<span href='#'>{user.name}</span>
 										<span className='username'>{user.email}</span>
 									</div>
 								</div>
@@ -112,8 +106,8 @@ const SearchMembers = () => {
 				<Button
 					color='teal'
 					style={{ margin: "10px auto", borderRadius: "40px" }}
-					content='Add member'
-					disabled
+					content='Add'
+					disabled={disabled}
 				/>
 			</div>
 		</ModalWrapper>

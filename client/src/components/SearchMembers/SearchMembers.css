@@ -1,3 +1,13 @@
+:root{
+    --blue:#1FA2F1;
+    --buttonHoverBg:#d4edff;
+    --lightGrey:rgb(230,236,240); 
+    --spacing:15px;
+    --blueLight:#9BD1F9;
+    --greyText:rgb(101,119,134);
+    --greyButtonText:rgba(0,0,0,0.34);
+}
+
 .membersPageContainer{
     flex:1;
     display:flex;
@@ -23,10 +33,61 @@
     border: none;
     outline: none;
     flex: 1;
-    font-weight: 200px;
-    min-width: 600px;
+    font-weight: 200;
+    min-width: 350px;
 }
 
-.createChatButton{
-   
+.resultsContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.resultsContainer .user{
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--lightGrey);
+}
+
+.user .userDetailsContainer{
+    flex: 1;
+    padding: 0 var(--spacing);
+}
+
+.userImageContainer{
+    width: 50px;
+    height: 50px;
+}
+
+.userImageContainer img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.resultsContainer .user{
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--lightGrey);
+}
+
+.user .userDetailsContainer{
+    flex: 1;
+    padding: 0 var(--spacing);
+}
+
+.user .userDetailsContainer .header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.selectedUser{
+    font-weight: 300;
+    background-color:#CBE5FE;
+    color:#0084FF;
+    padding:5px;
+    border-radius:3px;
+    margin:5px 5px 0 0;
+    display: inline-block;
 }

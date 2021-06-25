@@ -77,7 +77,6 @@ exports.addGoogleUserToDb = asyncHandler(async (req, res) => {
 		}
 
 		const newUser = await User.create(user);
-		console.log(newUser);
 		res.status(200).json({ message: "Welcome To Tasky!" });
 	} catch (error) {
 		res.status(404).json({ message: "Something went wrong!" });

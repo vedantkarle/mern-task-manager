@@ -5,7 +5,7 @@ const asyncHandler = require("express-async-handler");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
-		const tasks = await Task.find({ owner: req.user._id }).populate("todos");
+		const tasks = await Task.find({ owner: req.user?._id }).populate("todos");
 
 		res.status(200).json(tasks);
 	} catch (error) {
