@@ -74,6 +74,15 @@ export const deleteTodo = (taskId, todoId) =>
 		},
 	});
 
+export const completeTodo = (todoId, taskId) =>
+	axios.post(`${url}/${taskId}/todo/${todoId}/check`, "", {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});
+
 export const login = data =>
 	axios.post("http://localhost:5000/api/user/login", data);
 export const register = data =>

@@ -55,12 +55,10 @@ export default (state = initialState, { type, payload }) => {
 		case "EDIT_TODO":
 			return {
 				...state,
-				message: payload.message,
 			};
 		case "DELETE_TODO":
 			return {
 				...state,
-				message: payload.message,
 			};
 		case "SET_ERROR":
 			return {

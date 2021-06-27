@@ -12,7 +12,7 @@ import {
 	Message,
 	Segment,
 } from "semantic-ui-react";
-import { deleteTodo, fetchSingleTask } from "../../actions/tasks";
+import { completeTodo, deleteTodo, fetchSingleTask } from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
 import LoadingComponent from "../LoadingComponent";
 import "./Task.css";
@@ -59,7 +59,22 @@ const TaskDetail = ({ match }) => {
 									const id = todo._id;
 									return (
 										<Segment key={id}>
-											<Checkbox label={todo?.description} />
+											<Checkbox
+												label={
+													<label
+														style={{
+															textDecoration: todo?.completed
+																? "line-through"
+																: "none",
+														}}>
+														{todo?.description}
+													</label>
+												}
+												onClick={() =>
+													dispatch(completeTodo(todo?._id, task?._id))
+												}
+												defaultChecked={todo?.completed}
+											/>
 											<div className='todo-buttons'>
 												<div></div>
 												<div>

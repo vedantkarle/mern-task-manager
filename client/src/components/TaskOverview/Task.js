@@ -8,6 +8,7 @@ import {
 	Dropdown,
 	Header,
 	Icon,
+	Label,
 	Progress,
 } from "semantic-ui-react";
 import { deleteTask } from "../../actions/tasks";
@@ -20,9 +21,8 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 	const { authData } = useSelector(state => state.auth);
 
 	const completedTodos = todos.filter(todo => todo.completed === true);
-	const unCompletedTodos = todos.filter(todo => todo.completed === false);
 
-	const progress = (completedTodos.length / unCompletedTodos.length) * 100;
+	const progress = Math.round((completedTodos.length / todos.length) * 100);
 
 	const getTaskMemberImageElements = () => {
 		var groupOfMembersClass = "";
@@ -30,11 +30,15 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 
 	return (
 		<Card style={{ width: "100%", borderRadius: "10px" }} inverted>
-			<Card.Content className='progress'>
+			<Card.Content>
 				<Card.Header>
 					<div className='cardHeader'>
-						<Header as={Link} to={`/tasks/${id}`}>
+						<Header
+							as={Link}
+							to={`/tasks/${id}`}
+							style={{ display: "flex", alignItems: "center" }}>
 							{name}
+							<Label color='green'>Completed</Label>
 						</Header>
 						<div className='cardHeader-right'>
 							<p style={{ fontSize: "14px" }}>
@@ -62,6 +66,13 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 										</Dropdown.Item>
 										<Dropdown.Item
 											onClick={() =>
+												dispatch(openModal({ modalType: "Labels" }))
+											}>
+											<Icon name='tag' />
+											<span className='text'>Add Label</span>
+										</Dropdown.Item>
+										<Dropdown.Item
+											onClick={() =>
 												dispatch(openModal({ modalType: "SearchMembers" }))
 											}>
 											<Icon name='add circle' />
@@ -85,7 +96,12 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 					</Button>
 				)}
 				<Card.Description>
-					<p>Task Progress</p>
+					<p>
+						Task Progress{" "}
+						<span>
+							{completedTodos.length} / {todos.length}
+						</span>
+					</p>
 					<Progress percent={progress} progress size='small' color='blue' />
 				</Card.Description>
 			</Card.Content>

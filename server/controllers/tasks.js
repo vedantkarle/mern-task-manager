@@ -161,6 +161,50 @@ exports.editTodo = asyncHandler(async (req, res) => {
 	}
 });
 
+exports.completeTodo = asyncHandler(async (req, res) => {
+	const { taskId, todoId } = req.params;
+	try {
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
+
+		if (!mongoose.Types.ObjectId.isValid(todoId))
+			return res.status(404).json({ message: "No todo with that id" });
+
+		let task = await Task.findById(taskId);
+
+		let todo = await Todo.findById(todoId);
+
+		const completed = todo.completed;
+
+		const updatedTodo = await Todo.findByIdAndUpdate(
+			todoId,
+			{ completed: !completed },
+			{
+				new: true,
+			}
+		);
+
+		const newTodos = task.todos.map(todo =>
+			todo._id === todoId ? updatedTodo : todo
+		);
+
+		task = await Task.findByIdAndUpdate(
+			taskId,
+			{
+				$set: { todos: newTodos },
+			},
+			{ new: true }
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
+
+		res.json(task);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
 exports.deleteTodo = asyncHandler(async (req, res) => {
 	const { taskId, todoId } = req.params;
 

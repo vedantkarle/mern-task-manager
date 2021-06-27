@@ -28,6 +28,10 @@ const taskSchema = mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		label: {
+			type: String,
+			enum: ["In Progress", "Completed", "Not Clear", "Has To Be Discussed"],
+		},
 		members: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
