@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { addMembers } from "../../actions/tasks";
+import { closeModal } from "../../reducers/modal";
 import ModalWrapper from "../Modal/ModalWrapper";
 import "./SearchMembers.css";
 
@@ -126,7 +127,10 @@ const SearchMembers = () => {
 					style={{ margin: "10px auto", borderRadius: "40px" }}
 					content='Add'
 					disabled={disabled}
-					onClick={() => dispatch(addMembers(task._id, selectedUsers))}
+					onClick={() => {
+						dispatch(addMembers(task._id, selectedUsers));
+						dispatch(closeModal());
+					}}
 				/>
 			</div>
 		</ModalWrapper>

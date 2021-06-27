@@ -8,14 +8,15 @@ import {
 	Dropdown,
 	Header,
 	Icon,
-	Label,
+	Image,
+	Popup,
 	Progress,
 } from "semantic-ui-react";
 import { deleteTask } from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
 import "./Task.css";
 
-const Task = ({ id, name, description, todos, startDate, owner }) => {
+const Task = ({ id, name, description, todos, startDate, owner, members }) => {
 	const dispatch = useDispatch();
 
 	const { authData } = useSelector(state => state.auth);
@@ -33,19 +34,15 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 			<Card.Content>
 				<Card.Header>
 					<div className='cardHeader'>
-						<Header
-							as={Link}
-							to={`/tasks/${id}`}
-							style={{ display: "flex", alignItems: "center" }}>
+						<Header as={Link} to={`/tasks/${id}`}>
 							{name}
-							<Label color='green'>Completed</Label>
 						</Header>
 						<div className='cardHeader-right'>
 							<p style={{ fontSize: "14px" }}>
 								Created at {moment(startDate).format("MMMM d, yyyy h:mm a")} by{" "}
 								<span>{owner?.name}</span>
 							</p>
-							{authData?.result?.email === owner?.email && (
+							{authData?.result.email === owner?.email && (
 								<Dropdown className='icon' icon='ellipsis vertical'>
 									<Dropdown.Menu className='left'>
 										<Dropdown.Item
@@ -66,13 +63,6 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 										</Dropdown.Item>
 										<Dropdown.Item
 											onClick={() =>
-												dispatch(openModal({ modalType: "Labels" }))
-											}>
-											<Icon name='tag' />
-											<span className='text'>Add Label</span>
-										</Dropdown.Item>
-										<Dropdown.Item
-											onClick={() =>
 												dispatch(openModal({ modalType: "SearchMembers" }))
 											}>
 											<Icon name='add circle' />
@@ -85,7 +75,7 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 					</div>
 				</Card.Header>
 				<Card.Meta>{description}</Card.Meta>
-				{owner?.email === authData?.result?.email && (
+				{owner?.email === authData?.result?.email && members?.length <= 0 ? (
 					<Button
 						icon
 						labelPosition='left'
@@ -94,6 +84,19 @@ const Task = ({ id, name, description, todos, startDate, owner }) => {
 						<Icon name='add' />
 						Add Member
 					</Button>
+				) : (
+					<div style={{ float: "right" }}>
+						{members?.map(member => {
+							return (
+								<Popup
+									content={member?.email}
+									key={member?._id}
+									header={member?.name}
+									trigger={<Image src={member?.photoUrl} avatar />}
+								/>
+							);
+						})}
+					</div>
 				)}
 				<Card.Description>
 					<p>

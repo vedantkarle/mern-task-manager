@@ -12,7 +12,12 @@ import {
 	Message,
 	Segment,
 } from "semantic-ui-react";
-import { completeTodo, deleteTodo, fetchSingleTask } from "../../actions/tasks";
+import {
+	completeTodo,
+	deleteTodo,
+	fetchSingleTask,
+	removeMember,
+} from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
 import LoadingComponent from "../LoadingComponent";
 import "./Task.css";
@@ -131,11 +136,27 @@ const TaskDetail = ({ match }) => {
 							{task?.members.length > 0 ? (
 								task?.members.map(member => {
 									return (
-										<Feed.Event
-											image={member?.photoUrl}
-											content={member?.name}
-											key={member?._id}
-										/>
+										<Feed key={member?._id}>
+											<Feed.Event>
+												<Feed.Label>
+													<img src={member?.photoUrl} />
+												</Feed.Label>
+												<Feed.Content>
+													{member?.name}{" "}
+													{task?.owner?.email === authData?.result?.email && (
+														<Button
+															color='red'
+															icon='remove'
+															size='mini'
+															circular
+															onClick={() =>
+																dispatch(removeMember(task?._id, member?._id))
+															}
+														/>
+													)}
+												</Feed.Content>
+											</Feed.Event>
+										</Feed>
 									);
 								})
 							) : (

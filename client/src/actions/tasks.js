@@ -221,3 +221,23 @@ export const addMembers = (taskId, members) => async dispatch => {
 		});
 	}
 };
+
+export const removeMember = (taskId, memberId) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const { data } = await api.removeMember(taskId, memberId);
+
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: data });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};

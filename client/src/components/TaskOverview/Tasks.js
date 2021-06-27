@@ -31,6 +31,7 @@ const Tasks = ({ completed }) => {
 							endDate={task.endDate}
 							todos={task.todos}
 							owner={task.owner}
+							members={task?.members}
 						/>
 					) : null
 				)
@@ -46,6 +47,7 @@ const Tasks = ({ completed }) => {
 							endDate={task?.endDate}
 							todos={task?.todos}
 							owner={task?.owner}
+							members={task?.members}
 						/>
 					) : null
 				)

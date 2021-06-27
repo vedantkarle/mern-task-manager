@@ -10,6 +10,7 @@ const {
 	deleteTodo,
 	addMembers,
 	completeTodo,
+	removeMember,
 } = require("../controllers/tasks");
 const router = express.Router();
 const { isAuth } = require("../middlewares/auth");
@@ -24,5 +25,6 @@ router.patch("/:taskId/todo/:todoId", isAuth, editTodo);
 router.delete("/:taskId/todo/:todoId", isAuth, deleteTodo);
 router.post("/:taskId/todo/:todoId/check", isAuth, completeTodo);
 router.post("/:id/addMembers", isAuth, addMembers);
+router.post("/:taskId/removeMember/:memberId", isAuth, removeMember);
 
 module.exports = router;

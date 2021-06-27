@@ -145,7 +145,6 @@ const Sidebar = () => {
 					</Card>
 				</div>
 			)}
-			)
 		</div>
 	);
 };

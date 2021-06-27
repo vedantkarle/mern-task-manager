@@ -83,14 +83,6 @@ export const completeTodo = (todoId, taskId) =>
 		},
 	});
 
-export const login = data =>
-	axios.post("http://localhost:5000/api/user/login", data);
-export const register = data =>
-	axios.post("http://localhost:5000/api/user/register", data);
-
-export const addGoogleUserToDb = user =>
-	axios.post("http://localhost:5000/api/user/addGoogleUser", user);
-
 export const addMembers = (taskId, members) =>
 	axios.post(`${url}/${taskId}/addMembers`, members, {
 		headers: {
@@ -99,3 +91,20 @@ export const addMembers = (taskId, members) =>
 			}`,
 		},
 	});
+
+export const removeMember = (taskId, memberId) =>
+	axios.post(`${url}/${taskId}/removeMember/${memberId}`, "", {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});
+
+export const login = data =>
+	axios.post("http://localhost:5000/api/user/login", data);
+export const register = data =>
+	axios.post("http://localhost:5000/api/user/register", data);
+
+export const addGoogleUserToDb = user =>
+	axios.post("http://localhost:5000/api/user/addGoogleUser", user);

@@ -43,10 +43,7 @@ exports.createTask = asyncHandler(async (req, res) => {
 	try {
 		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
-		const newTask = await Task.create({ ...task, owner: req.user._id })
-			.populate("owner")
-			.populate("todos")
-			.populate("members");
+		const newTask = await Task.create({ ...task, owner: req.user._id });
 
 		res.status(201).json(newTask);
 	} catch (error) {
@@ -255,6 +252,38 @@ exports.addMembers = asyncHandler(async (req, res) => {
 			.populate("owner")
 			.populate("todos")
 			.populate("members");
+		res.json(task);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
+exports.removeMember = asyncHandler(async (req, res) => {
+	const { taskId, memberId } = req.params;
+	try {
+		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
+
+		if (!mongoose.Types.ObjectId.isValid(taskId))
+			return res.status(404).json({ message: "No task with that id" });
+
+		let task = await Task.findById(taskId);
+
+		const newMembers = task.members.filter(
+			member => member._id.toString() !== memberId.toString()
+		);
+
+		task = await Task.findByIdAndUpdate(
+			taskId,
+			{
+				$set: { members: newMembers },
+			},
+			{ new: true }
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
+
 		res.json(task);
 	} catch (error) {
 		console.log(error);
