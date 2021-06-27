@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
+import { addMembers } from "../../actions/tasks";
 import ModalWrapper from "../Modal/ModalWrapper";
 import "./SearchMembers.css";
 
 const SearchMembers = () => {
+	const dispatch = useDispatch();
 	const { authData } = useSelector(state => state.auth);
+	const { task, loading } = useSelector(state => state.tasks);
 
 	var timer;
 	var val;
@@ -16,7 +19,8 @@ const SearchMembers = () => {
 
 	const handleChange = e => {
 		clearTimeout(timer);
-		if (e.target.value.trim() == "" && e.keycode == 8) {
+		if (e.target.value.trim() == "" && e.keycode === 8) {
+			// setSelectedUsers([...selectedUsers.slice(-1, 1)]);
 			return;
 		}
 		timer = setTimeout(() => {
@@ -54,11 +58,8 @@ const SearchMembers = () => {
 		setSelectedUsers([...selectedUsers, user]);
 		setUsers([]);
 		setDisabled(false);
+		document.querySelector("#userSearchTextBox").value = "";
 	};
-
-	// const updateSelectedUsers = () => {
-
-	// }
 
 	return (
 		<ModalWrapper header='Add Members'>
@@ -70,6 +71,15 @@ const SearchMembers = () => {
 							return (
 								<span key={user._id} className='selectedUser'>
 									{user.name}
+									<button
+										class='deleteSelectedUser'
+										onClick={() => {
+											setSelectedUsers(
+												selectedUsers.filter(item => item._id !== user._id)
+											);
+										}}>
+										<i class='fas fa-times'></i>
+									</button>
 								</span>
 							);
 						})}
@@ -84,8 +94,16 @@ const SearchMembers = () => {
 				</div>
 				<div className='resultsContainer'>
 					{users.map(user => {
+						var found = false;
+						for (var i = 0; i < task?.members.length; i++) {
+							if (task?.members[i].email == user?.email) {
+								found = true;
+								break;
+							}
+						}
 						return user.email == authData.result.email ||
-							selectedUsers.some(u => u._id == user._id) ? null : (
+							selectedUsers.some(u => u._id == user._id) ||
+							found ? null : (
 							<div
 								className='user'
 								key={user._id}
@@ -108,6 +126,7 @@ const SearchMembers = () => {
 					style={{ margin: "10px auto", borderRadius: "40px" }}
 					content='Add'
 					disabled={disabled}
+					onClick={() => dispatch(addMembers(task._id, selectedUsers))}
 				/>
 			</div>
 		</ModalWrapper>

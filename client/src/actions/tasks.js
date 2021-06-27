@@ -178,3 +178,23 @@ export const deleteTodo = (taskId, todoId) => async dispatch => {
 		});
 	}
 };
+
+export const addMembers = (taskId, members) => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const { data } = await api.addMembers(taskId, members);
+
+		dispatch({ type: "FETCH_SINGLE_TASK", payload: data });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};

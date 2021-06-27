@@ -81,3 +81,12 @@ export const register = data =>
 
 export const addGoogleUserToDb = user =>
 	axios.post("http://localhost:5000/api/user/addGoogleUser", user);
+
+export const addMembers = (taskId, members) =>
+	axios.post(`${url}/${taskId}/addMembers`, members, {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});

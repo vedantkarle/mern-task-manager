@@ -21,6 +21,7 @@ const TaskDetail = ({ match }) => {
 	const id = match.params.id;
 	const dispatch = useDispatch();
 	const { task, loading, error } = useSelector(state => state.tasks);
+	const { authData } = useSelector(state => state.auth);
 
 	useEffect(() => {
 		dispatch(fetchSingleTask(id));
@@ -112,23 +113,31 @@ const TaskDetail = ({ match }) => {
 					<Segment color='red'>
 						<Header as='h4'>Members</Header>
 						<Feed>
-							<Feed.Event
-								image='https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-								content='You added Elliot Fu to the group Coworkers'
-							/>
-							<Feed.Event
-								image='https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-								content='You added Elliot Fu to the group Coworkers'
-							/>
-							<Feed.Event
-								image='https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-								content='You added Elliot Fu to the group Coworkers'
-							/>
+							{task?.members.length > 0 ? (
+								task?.members.map(member => {
+									return (
+										<Feed.Event
+											image={member?.photoUrl}
+											content={member?.name}
+											key={member?._id}
+										/>
+									);
+								})
+							) : (
+								<Segment>No Members Added</Segment>
+							)}
 						</Feed>
-						<Button icon labelPosition='left'>
-							<Icon name='add' />
-							Add Member
-						</Button>
+						{task?.owner.email === authData?.result?.email && (
+							<Button
+								icon
+								labelPosition='left'
+								onClick={() =>
+									dispatch(openModal({ modalType: "SearchMembers" }))
+								}>
+								<Icon name='add' />
+								Add Member
+							</Button>
+						)}
 					</Segment>
 				</div>
 			</div>

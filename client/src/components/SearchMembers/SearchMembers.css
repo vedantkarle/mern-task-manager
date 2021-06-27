@@ -83,6 +83,8 @@
 }
 
 .selectedUser{
+    display: flex;
+    align-items: center;
     font-weight: 300;
     background-color:#CBE5FE;
     color:#0084FF;
@@ -90,4 +92,13 @@
     border-radius:3px;
     margin:5px 5px 0 0;
     display: inline-block;
+}
+
+.deleteSelectedUser{
+    margin-left: 5px;
+    font-size: 14px;
+    background: none;
+    outline:none;
+    border: none;
+    color:#0084FF;
 }

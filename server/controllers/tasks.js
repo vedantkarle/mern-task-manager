@@ -5,7 +5,12 @@ const asyncHandler = require("express-async-handler");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
-		const tasks = await Task.find({ owner: req.user?._id }).populate("todos");
+		const tasks = await Task.find({
+			$or: [{ owner: req.user?._id }, { members: { $in: [req.user?._id] } }],
+		})
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.status(200).json(tasks);
 	} catch (error) {
@@ -21,7 +26,10 @@ exports.getSingleTask = asyncHandler(async (req, res) => {
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
 
-		const task = await Task.findById(_id).populate("todos");
+		const task = await Task.findById(_id)
+			.populate("todos")
+			.populate("members")
+			.populate("owner");
 
 		res.status(200).json(task);
 	} catch (error) {
@@ -35,7 +43,10 @@ exports.createTask = asyncHandler(async (req, res) => {
 	try {
 		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
-		const newTask = await Task.create({ ...task, owner: req.user._id });
+		const newTask = await Task.create({ ...task, owner: req.user._id })
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.status(201).json(newTask);
 	} catch (error) {
@@ -54,7 +65,10 @@ exports.updateTask = asyncHandler(async (req, res) => {
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
 
-		const updatedTask = await Task.findByIdAndUpdate(_id, task, { new: true });
+		const updatedTask = await Task.findByIdAndUpdate(_id, task, { new: true })
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.json({ updatedTask, message: "Task updated successfully!" });
 	} catch (error) {
@@ -97,7 +111,10 @@ exports.addTodo = asyncHandler(async (req, res) => {
 				$push: { todos: todo._id },
 			},
 			{ new: true }
-		).populate("todos");
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.json(task);
 	} catch (error) {
@@ -132,7 +149,10 @@ exports.editTodo = asyncHandler(async (req, res) => {
 				$set: { todos: newTodos },
 			},
 			{ new: true }
-		).populate("todos");
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.json({ task, message: "Todo updated successfully!" });
 	} catch (error) {
@@ -162,7 +182,10 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 				$set: { todos: newTodos },
 			},
 			{ new: true }
-		).populate("todos");
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 
 		res.json({ task, message: "Todo deleted successfully" });
 	} catch (error) {
@@ -174,20 +197,23 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 exports.addMembers = asyncHandler(async (req, res) => {
 	const { id } = req.params;
 	try {
-		const member = req.body;
+		const members = req.body;
 
 		let task = await Task.findById(id);
 
 		task = await Task.findByIdAndUpdate(
-			_id,
+			id,
 			{
-				$push: { members: member._id },
+				$push: { members: members },
 			},
 			{ new: true }
-		).populate("todos");
-
+		)
+			.populate("owner")
+			.populate("todos")
+			.populate("members");
 		res.json(task);
 	} catch (error) {
+		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
 });

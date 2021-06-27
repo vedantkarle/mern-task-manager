@@ -20,7 +20,7 @@ const Tasks = ({ completed }) => {
 			{tasks.length <= 0 ? (
 				<h5 style={{ textAlign: "center" }}>No tasks added yet</h5>
 			) : completed ? (
-				tasks.map(task =>
+				tasks?.map(task =>
 					task?.completed === true ? (
 						<Task
 							key={task._id}
@@ -30,6 +30,7 @@ const Tasks = ({ completed }) => {
 							startDate={task.startDate}
 							endDate={task.endDate}
 							todos={task.todos}
+							owner={task.owner}
 						/>
 					) : null
 				)
@@ -44,6 +45,7 @@ const Tasks = ({ completed }) => {
 							startDate={task?.startDate}
 							endDate={task?.endDate}
 							todos={task?.todos}
+							owner={task?.owner}
 						/>
 					) : null
 				)
