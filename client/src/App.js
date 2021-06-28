@@ -2,7 +2,7 @@ import decode from "jwt-decode";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { getTasks } from "./actions/tasks";
 import "./App.css";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -33,14 +33,14 @@ const App = () => {
 	}, [dispatch]);
 
 	return (
-		<Router>
+		<>
 			<Toaster
 				position='top-right'
 				reverseOrder={false}
 				toastOptions={{ style: { fontSize: "14px" } }}
 			/>
 			<Sidebar />
-		</Router>
+		</>
 	);
 };
 

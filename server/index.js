@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const taskRoutes = require("./routes/tasks");
 const userRoutes = require("./routes/users");
+const chatRoutes = require("./routes/chats");
 
 const globalErrorHandler = require("./controllers/error");
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use("/api/tasks", taskRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/chats", chatRoutes);
 
 app.all("*", (req, res, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

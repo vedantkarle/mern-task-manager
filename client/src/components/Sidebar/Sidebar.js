@@ -8,6 +8,7 @@ import ErrorComponent from "../Error/ErrorComponent";
 import FloatingButton from "../FloatingButton";
 import Login from "../Form/Login";
 import Register from "../Form/Register";
+import Chats from "../MainContent/Chats/Chats";
 import ModalManager from "../Modal/ModalManager";
 import PrivateRoute from "../PrivateRoute";
 import TaskDetail from "../TaskOverview/TaskDetail";
@@ -106,7 +107,7 @@ const Sidebar = () => {
 					<Switch>
 						<PrivateRoute path='/' component={Home} exact />
 						<PrivateRoute path='/projects' component={Home} exact />
-						<PrivateRoute path='/chats' component={Home} exact />
+						<PrivateRoute path='/chats' component={Chats} exact />
 						<PrivateRoute path='/tasks/:id' component={TaskDetail} exact />
 						<PrivateRoute path='/error' component={ErrorComponent} exact />
 						<Route path='/login' component={Login} exact />

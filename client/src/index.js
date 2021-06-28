@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -17,7 +18,9 @@ const store = createStore(
 
 ReactDOM.render(
 	<Provider store={store}>
-		<App />
+		<Router>
+			<App />
+		</Router>
 	</Provider>,
 	document.getElementById("root")
 );

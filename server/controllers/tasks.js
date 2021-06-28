@@ -2,6 +2,7 @@ const Task = require("../models/taskModel");
 const mongoose = require("mongoose");
 const Todo = require("../models/todoModel");
 const asyncHandler = require("express-async-handler");
+const Chat = require("../models/chatModel");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
@@ -27,9 +28,9 @@ exports.getSingleTask = asyncHandler(async (req, res) => {
 			return res.status(404).json({ message: "No task with that id" });
 
 		const task = await Task.findById(_id)
+			.populate("owner")
 			.populate("todos")
-			.populate("members")
-			.populate("owner");
+			.populate("members");
 
 		res.status(200).json(task);
 	} catch (error) {
@@ -44,6 +45,10 @@ exports.createTask = asyncHandler(async (req, res) => {
 		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		const newTask = await Task.create({ ...task, owner: req.user._id });
+
+		await Chat.create({
+			chatName: newTask.projectName,
+		});
 
 		res.status(201).json(newTask);
 	} catch (error) {

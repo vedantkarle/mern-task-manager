@@ -43,10 +43,10 @@ const TaskDetail = ({ match }) => {
 					<Header as='h1'>{task?.projectName}</Header>
 					<div>
 						<Label color='blue' icon>
-							Created at {moment(task?.startDate).format("MMMM d, yyyy h:mm a")}
+							Created at {moment(task?.startDate).format("lll")}
 						</Label>
 						<Label color='yellow' icon>
-							Deadline {moment(task?.endDate).format("MMMM d, yyyy h:mm a")}
+							Deadline {moment(task?.endDate).format("lll")}
 						</Label>
 					</div>
 				</div>

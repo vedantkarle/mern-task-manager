@@ -16,7 +16,16 @@ import { deleteTask } from "../../actions/tasks";
 import { openModal } from "../../reducers/modal";
 import "./Task.css";
 
-const Task = ({ id, name, description, todos, startDate, owner, members }) => {
+const Task = ({
+	id,
+	name,
+	description,
+	todos,
+	startDate,
+	owner,
+	members,
+	userEmail,
+}) => {
 	const dispatch = useDispatch();
 
 	const { authData } = useSelector(state => state.auth);
@@ -24,10 +33,6 @@ const Task = ({ id, name, description, todos, startDate, owner, members }) => {
 	const completedTodos = todos.filter(todo => todo.completed === true);
 
 	const progress = Math.round((completedTodos.length / todos.length) * 100);
-
-	const getTaskMemberImageElements = () => {
-		var groupOfMembersClass = "";
-	};
 
 	return (
 		<Card style={{ width: "100%", borderRadius: "10px" }} inverted>
@@ -39,10 +44,10 @@ const Task = ({ id, name, description, todos, startDate, owner, members }) => {
 						</Header>
 						<div className='cardHeader-right'>
 							<p style={{ fontSize: "14px" }}>
-								Created at {moment(startDate).format("MMMM d, yyyy h:mm a")} by{" "}
-								<span>{owner?.name}</span>
+								Created at {moment(startDate).format("lll")} by{" "}
+								<span>{owner.name}</span>
 							</p>
-							{authData?.result.email === owner?.email && (
+							{userEmail === owner.email && (
 								<Dropdown className='icon' icon='ellipsis vertical'>
 									<Dropdown.Menu className='left'>
 										<Dropdown.Item

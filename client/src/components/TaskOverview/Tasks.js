@@ -8,6 +8,7 @@ const Tasks = ({ completed }) => {
 	const dispatch = useDispatch();
 
 	const { tasks, loading, error } = useSelector(state => state.tasks);
+	const { authData } = useSelector(state => state.auth);
 
 	useEffect(() => {
 		dispatch(getTasks());
@@ -32,6 +33,7 @@ const Tasks = ({ completed }) => {
 							todos={task.todos}
 							owner={task.owner}
 							members={task?.members}
+							userEmail={authData?.result?.email}
 						/>
 					) : null
 				)
@@ -48,6 +50,7 @@ const Tasks = ({ completed }) => {
 							todos={task?.todos}
 							owner={task?.owner}
 							members={task?.members}
+							userEmail={authData?.result?.email}
 						/>
 					) : null
 				)
