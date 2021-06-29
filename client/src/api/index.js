@@ -101,10 +101,17 @@ export const removeMember = (taskId, memberId) =>
 		},
 	});
 
-export const login = data =>
-	axios.post("http://localhost:5000/api/user/login", data);
-export const register = data =>
-	axios.post("http://localhost:5000/api/user/register", data);
+export const getChats = () =>
+	axios.get("/api/chats", {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});
+
+export const login = data => axios.post("/api/user/login", data);
+export const register = data => axios.post("/api/user/register", data);
 
 export const addGoogleUserToDb = user =>
-	axios.post("http://localhost:5000/api/user/addGoogleUser", user);
+	axios.post("/api/user/addGoogleUser", user);

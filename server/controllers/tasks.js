@@ -257,6 +257,15 @@ exports.addMembers = asyncHandler(async (req, res) => {
 			.populate("owner")
 			.populate("todos")
 			.populate("members");
+
+		await Chat.findOneAndUpdate(
+			{ chatName: task.projectName },
+			{
+				$push: { users: [...members, req.user] },
+			},
+			{ new: true }
+		);
+
 		res.json(task);
 	} catch (error) {
 		console.log(error);

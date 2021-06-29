@@ -37,7 +37,7 @@ const TaskDetail = ({ match }) => {
 	if (error) return <Redirect to='/error' />;
 
 	return (
-		<div>
+		<div className='task-detail'>
 			<Message>
 				<div className='task-header'>
 					<Header as='h1'>{task?.projectName}</Header>

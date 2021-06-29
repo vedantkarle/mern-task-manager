@@ -118,7 +118,7 @@ const Sidebar = () => {
 			</div>
 			{user && (
 				<div>
-					<Card style={{ borderRadius: "10px", margin: "10px" }}>
+					<Card style={{ borderRadius: "10px", marginTop: "10px" }}>
 						<Card.Content>
 							<Card.Header
 								style={{

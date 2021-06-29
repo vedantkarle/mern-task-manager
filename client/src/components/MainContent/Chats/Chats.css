@@ -1,0 +1,36 @@
+.chats{
+    width:100%;
+}
+
+.title{
+    padding:14px;
+    border-bottom: 1px solid #eee;
+}
+
+.resultListItem{
+    padding:14px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid #eee;
+}
+
+.resultListItem:hover{
+    background-color:#F2F2F2;
+}
+
+.resultDetailsContainer{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+
+.resultDetailsContainer .heading{
+    font-weight: 500;
+    color: #000;
+}
+
+.resultDetailsContainer .subText{
+    color:#999;
+    font-size: 14px;
+}

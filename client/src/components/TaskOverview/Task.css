@@ -1,3 +1,7 @@
+.task-detail{
+    padding:10px;
+}
+
 .cardHeader{
     display: flex;
     align-items: center;
