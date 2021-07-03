@@ -20,18 +20,13 @@ const Navbar = () => {
 		<>
 			<div className='navbar'>
 				<Link to='#' className='menu-bars'>
-					<i className='fas fa-bars' onClick={showSidebar}></i>
+					<h4>TASKY</h4>
 				</Link>
 			</div>
 			<div className='main'>
 				<div>
 					<nav className={sidebar ? "nav-menu active" : "nav-menu"}>
 						<ul className='nav-menu-items' onClick={showSidebar}>
-							<li className='navbar-toggle'>
-								<Link to='#' className='menu-bars'>
-									<i className='fas fa-times'></i>
-								</Link>
-							</li>
 							{SidebarData.map((data, index) => {
 								return (
 									<li
