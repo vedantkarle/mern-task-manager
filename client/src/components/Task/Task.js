@@ -3,12 +3,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
-	Button,
 	Card,
 	Dropdown,
 	Header,
 	Icon,
 	Image,
+	Label,
 	Popup,
 	Progress,
 } from "semantic-ui-react";
@@ -66,13 +66,6 @@ const Task = ({
 											<Icon name='trash' />
 											<span className='text'>Delete</span>
 										</Dropdown.Item>
-										<Dropdown.Item
-											onClick={() =>
-												dispatch(openModal({ modalType: "SearchMembers" }))
-											}>
-											<Icon name='add circle' />
-											<span className='text'>Add Members</span>
-										</Dropdown.Item>
 									</Dropdown.Menu>
 								</Dropdown>
 							)}
@@ -80,15 +73,8 @@ const Task = ({
 					</div>
 				</Card.Header>
 				<Card.Meta>{description}</Card.Meta>
-				{owner?.email === authData?.result?.email && members?.length <= 0 ? (
-					<Button
-						icon
-						labelPosition='left'
-						floated='right'
-						onClick={() => dispatch(openModal({ modalType: "SearchMembers" }))}>
-						<Icon name='add' />
-						Add Member
-					</Button>
+				{members?.length <= 0 ? (
+					<Label style={{ float: "right" }}>No Members Added</Label>
 				) : (
 					<div style={{ float: "right" }}>
 						{members?.map(member => {

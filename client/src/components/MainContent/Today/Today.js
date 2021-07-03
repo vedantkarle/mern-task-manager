@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React from "react";
 import { Icon, Label, Tab } from "semantic-ui-react";
-import Tasks from "../../TaskOverview/Tasks";
+import Tasks from "../../Task/Tasks";
 import "./Today.css";
 
 const Today = () => {

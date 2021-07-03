@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getTasks } from "./actions/tasks";
 import "./App.css";
-import Sidebar from "./components/Sidebar/Sidebar";
+import ModalManager from "./components/Modal/ModalManager";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -34,12 +35,13 @@ const App = () => {
 
 	return (
 		<>
+			<ModalManager />
 			<Toaster
 				position='top-right'
 				reverseOrder={false}
 				toastOptions={{ style: { fontSize: "14px" } }}
 			/>
-			<Sidebar />
+			<Navbar />
 		</>
 	);
 };
