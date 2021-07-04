@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Loader, Segment } from "semantic-ui-react";
@@ -18,8 +19,8 @@ const EditProjectForm = () => {
 	const initialValues = {
 		projectName: task?.projectName,
 		description: task?.description,
-		startDate: task?.startDate,
-		endDate: task?.endDate,
+		startDate: moment(task?.startDate).format("lll"),
+		endDate: moment(task?.endDate).format("lll"),
 	};
 
 	const validationSchema = Yup.object({

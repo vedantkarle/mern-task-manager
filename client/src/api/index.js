@@ -110,6 +110,15 @@ export const getChats = () =>
 		},
 	});
 
+export const fetchSingleChat = id =>
+	axios.get(`/api/chats/${id}`, {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});
+
 export const login = data => axios.post("/api/user/login", data);
 export const register = data => axios.post("/api/user/register", data);
 

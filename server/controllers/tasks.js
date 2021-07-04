@@ -50,12 +50,21 @@ exports.createTask = asyncHandler(async (req, res) => {
 				.json({ message: "Task with that name already exists" });
 		}
 
+		if (
+			new Date(task.startDate).getTime() < new Date().getTime() ||
+			new Date(task.endDate).getTime() < new Date().getTime() ||
+			new Date(task.endDate).getTime() < new Date(task.startDate).getTime()
+		) {
+			return res.status(400).json({ message: "Choose correct dates" });
+		}
+
 		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		const newTask = await Task.create({ ...task, owner: req.user._id });
 
 		await Chat.create({
 			chatName: newTask.projectName,
+			users: [req.user],
 		});
 
 		res.status(201).json(newTask);
@@ -74,6 +83,14 @@ exports.updateTask = asyncHandler(async (req, res) => {
 
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
+
+		if (
+			new Date(task.startDate).getTime() < new Date().getTime() ||
+			new Date(task.endDate).getTime() < new Date().getTime() ||
+			new Date(task.endDate).getTime() < new Date(task.startDate).getTime()
+		) {
+			return res.status(400).json({ message: "Choose correct dates" });
+		}
 
 		const updatedTask = await Task.findByIdAndUpdate(_id, task, { new: true })
 			.populate("owner")
@@ -271,7 +288,7 @@ exports.addMembers = asyncHandler(async (req, res) => {
 		await Chat.findOneAndUpdate(
 			{ chatName: task.projectName },
 			{
-				$push: { users: [...members, req.user] },
+				$push: { users: members },
 			},
 			{ new: true }
 		);
