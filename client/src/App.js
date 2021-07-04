@@ -37,9 +37,9 @@ const App = () => {
 		<>
 			<ModalManager />
 			<Toaster
-				position='top-right'
+				position='bottom-right'
 				reverseOrder={false}
-				toastOptions={{ style: { fontSize: "14px" } }}
+				toastOptions={{ style: { fontSize: "14px", zIndex: 99 } }}
 			/>
 			<Navbar />
 		</>

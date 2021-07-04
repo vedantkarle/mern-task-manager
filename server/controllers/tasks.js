@@ -42,6 +42,14 @@ exports.createTask = asyncHandler(async (req, res) => {
 	const task = req.body;
 
 	try {
+		const existingTask = await Task.findOne({ projectName: task.projectName });
+
+		if (existingTask) {
+			return res
+				.status(400)
+				.json({ message: "Task with that name already exists" });
+		}
+
 		if (!req.user) return res.status(403).json({ message: "Unauthorized!" });
 
 		const newTask = await Task.create({ ...task, owner: req.user._id });
@@ -88,7 +96,9 @@ exports.deleteTask = asyncHandler(async (req, res) => {
 		if (!mongoose.Types.ObjectId.isValid(_id))
 			return res.status(404).json({ message: "No task with that id" });
 
-		await Task.findByIdAndDelete(_id);
+		const task = await Task.findByIdAndDelete(_id);
+
+		await Chat.findOneAndDelete({ chatName: task.projectName });
 
 		res.json({ message: "Task deleted successfully" });
 	} catch (error) {

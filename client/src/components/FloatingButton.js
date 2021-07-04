@@ -7,8 +7,7 @@ const FloatingButton = () => {
 	const dispatch = useDispatch();
 
 	return (
-		<div
-			style={{ position: "fixed", top: "85%", left: "76%", zIndex: "999999" }}>
+		<div style={{ position: "fixed", top: "85%", right: "2%", zIndex: "2" }}>
 			<Btn
 				tooltip='Add a project'
 				icon='fas fa-plus'

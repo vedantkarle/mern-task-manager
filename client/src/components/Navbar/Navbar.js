@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import ErrorComponent from "../Error/ErrorComponent";
+import FloatingButton from "../FloatingButton";
 import Login from "../Form/Login";
 import Register from "../Form/Register";
+import ChatDetail from "../MainContent/Chats/ChatDetail";
 import Chats from "../MainContent/Chats/Chats";
 import Today from "../MainContent/Today/Today";
 import PrivateRoute from "../PrivateRoute";
@@ -13,8 +17,18 @@ import { SidebarData } from "./SidebarData";
 const Navbar = () => {
 	const location = useLocation();
 	const [sidebar, setSidebar] = useState(false);
+	const { error, message } = useSelector(state => state.tasks);
 
 	const showSidebar = () => setSidebar(!sidebar);
+
+	useEffect(() => {
+		if (error) {
+			toast.error(error);
+		}
+		if (message) {
+			toast.success(message);
+		}
+	}, [error, message]);
 
 	return (
 		<>
@@ -45,11 +59,13 @@ const Navbar = () => {
 					</nav>
 				</div>
 				<div className='page-content'>
+					<FloatingButton />
 					<Switch>
 						<PrivateRoute path='/' component={Today} exact />
 						<PrivateRoute path='/tasks/:id' component={TaskDetail} />
 						<PrivateRoute path='/projects' component={Today} exact />
 						<PrivateRoute path='/chats' component={Chats} exact />
+						<PrivateRoute path='/chats/:id' component={ChatDetail} exact />
 						<Route path='/login' component={Login} exact />
 						<Route path='/register' component={Register} exact />
 						<Route path='*' component={ErrorComponent} exact />

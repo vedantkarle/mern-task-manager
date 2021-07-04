@@ -34,3 +34,34 @@
     color:#999;
     font-size: 14px;
 }
+
+.resultListItem img{
+    height:65%;
+    width:65%;
+    border-radius: 50%;
+    position:absolute;
+    bottom: 0;
+    margin:0;
+    border:2px solid #fff;
+}
+
+.resultListItem img:first-of-type{
+    top:0;
+    right:0;
+}
+
+.resultsImageContainer{
+    height:40px;
+    width:40px;
+    position: relative;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    padding:5px;
+}
+
+.ellipsis{
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

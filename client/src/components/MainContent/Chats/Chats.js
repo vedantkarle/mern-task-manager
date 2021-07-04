@@ -21,10 +21,14 @@ const Chats = () => {
 			{chats?.map(chat => {
 				return (
 					<Link to={`/chats/${chat?._id}`} className='resultListItem'>
-						<img />
-						<div className='resultDetailsContainer'>
-							<span className='heading'>{chat?.chatName}</span>
-							<span className='subText'>This is last message</span>
+						<div className='resultsImageContainer'>
+							{chat?.users?.map(user => {
+								return <img key={user?._id} src={user?.photoUrl} />;
+							})}
+						</div>
+						<div className='resultDetailsContainer  ellipsis'>
+							<span className='heading  ellipsis'>{chat?.chatName}</span>
+							<span className='subText  ellipsis'>This is last message</span>
 						</div>
 					</Link>
 				);
