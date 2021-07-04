@@ -6,15 +6,36 @@
     background-color:#060b26;
     height:80px;
     display: flex;
-    justify-content:start;
     align-items: center;
     z-index: 2;
 }
 
-.menu-bars{
-    margin-left:2rem;
-    font-size:2rem;
+.navbar .title{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    margin-left:3rem;
     background:none;
+    border:none;
+    padding:8px 0px 8px 16px;
+    color:#fff;
+}
+
+.navbar .title i{
+    font-size:2.2rem;
+}
+
+.navbar .title span{
+    margin-left:5px;
+    font-size:2.3rem;
+}
+
+.navbar .profile{
+    display: flex;
+    align-items: center;
+    padding:8px 0px 8px 16px;
+    margin-left:78rem;
+    color:#fff;
 }
 
 .main{

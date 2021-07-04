@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
+import { Image } from "semantic-ui-react";
 import "./Navbar.css";
 import { SidebarData } from "./SidebarData";
 
@@ -12,7 +13,7 @@ const Navbar = () => {
 	const { error, message } = useSelector(state => state.tasks);
 	const dispatch = useDispatch();
 
-	const user = JSON.parse(localStorage.getItem("profile"));
+	const { authData } = useSelector(state => state.auth);
 
 	const showSidebar = () => setSidebar(!sidebar);
 
@@ -28,8 +29,17 @@ const Navbar = () => {
 	return (
 		<>
 			<div className='navbar'>
-				<Link to='#' className='menu-bars'>
-					<h4>TASKY</h4>
+				<Link to='#'>
+					<div className='title'>
+						<i class='bx bx-task'></i>
+						<span>TASKY</span>
+					</div>
+				</Link>
+				<Link to='#'>
+					<div className='profile'>
+						<Image src={authData?.result?.imageUrl} avatar />
+						<span>{authData?.result?.email}</span>
+					</div>
 				</Link>
 			</div>
 			<div className='main'>
