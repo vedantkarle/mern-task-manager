@@ -119,6 +119,28 @@ export const fetchSingleChat = id =>
 		},
 	});
 
+export const getMessages = chatId =>
+	axios.get(`/api/messages/${chatId}`, {
+		headers: {
+			Authorization: `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).token
+			}`,
+		},
+	});
+
+export const sendMessage = (message, chatId) =>
+	axios.post(
+		"/api/messages",
+		{ message, chatId },
+		{
+			headers: {
+				Authorization: `Bearer ${
+					JSON.parse(localStorage.getItem("profile")).token
+				}`,
+			},
+		}
+	);
+
 export const login = data => axios.post("/api/user/login", data);
 export const register = data => axios.post("/api/user/register", data);
 

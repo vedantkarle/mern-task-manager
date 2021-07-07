@@ -4,9 +4,13 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 
 exports.login = asyncHandler(async (req, res) => {
-	const { email, password } = req.body;
+	const { email, password, key } = req.body;
 
 	try {
+		if (!key) {
+			return res.status(403).json({ message: "Access Forbidden!" });
+		}
+
 		if (!email || !password) {
 			return res.status(404).json({ message: "All fields are required" });
 		}
@@ -35,8 +39,12 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 exports.register = async (req, res) => {
-	const { name, email, password } = req.body;
+	const { name, email, password, key } = req.body;
 	try {
+		if (!key) {
+			return res.status(403).json({ message: "Access Forbidden!" });
+		}
+
 		if (!name.trim() || !email.trim() || !password.trim()) {
 			return res.status(404).json({ message: "All fields are required" });
 		}
@@ -67,8 +75,12 @@ exports.register = async (req, res) => {
 };
 
 exports.addGoogleUserToDb = asyncHandler(async (req, res) => {
+	const { user, key } = req.body;
+
 	try {
-		const user = req.body;
+		if (!key) {
+			return res.status(403).json({ message: "Access Forbidden!" });
+		}
 
 		const existingUser = await User.findOne({ email: user.email });
 
@@ -102,4 +114,19 @@ exports.getUsers = asyncHandler(async (req, res) => {
 		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
+});
+
+exports.updateProfile = asyncHandler(async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (user) {
+			user.name = req.body.name || user.name;
+			user.email = req.body.email || user.email;
+		}
+
+		const updatedUser = await user.save();
+
+		res.json();
+	} catch (error) {}
 });

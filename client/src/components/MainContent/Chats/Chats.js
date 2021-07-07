@@ -7,6 +7,7 @@ import "./Chats.css";
 const Chats = () => {
 	const dispatch = useDispatch();
 	const { chats } = useSelector(state => state.chats);
+	const { authData } = useSelector(state => state.auth);
 
 	useEffect(() => {
 		dispatch(getAllChats());
@@ -19,8 +20,15 @@ const Chats = () => {
 			</div>
 
 			{chats?.map(chat => {
+				const sender =
+					chat?.latestMessage?.sender.email === authData?.result?.email
+						? "You"
+						: chat?.latestMessage?.sender?.name;
 				return (
-					<Link to={`/chats/${chat?._id}`} className='resultListItem'>
+					<Link
+						key={chat?._id}
+						to={`/chats/${chat?._id}`}
+						className='resultListItem'>
 						<div className='resultsImageContainer'>
 							{chat?.users?.map(user => {
 								return <img key={user?._id} src={user?.photoUrl} />;
@@ -28,7 +36,9 @@ const Chats = () => {
 						</div>
 						<div className='resultDetailsContainer  ellipsis'>
 							<span className='heading  ellipsis'>{chat?.chatName}</span>
-							<span className='subText  ellipsis'>This is last message</span>
+							<span className='subText  ellipsis'>
+								{sender} : {chat?.latestMessage?.content}
+							</span>
 						</div>
 					</Link>
 				);

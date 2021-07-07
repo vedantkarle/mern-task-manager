@@ -1,8 +1,8 @@
 import decode from "jwt-decode";
 import { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { getTasks } from "./actions/tasks";
 import "./App.css";
 import ErrorComponent from "./components/Error/ErrorComponent";
@@ -20,8 +20,10 @@ import TaskDetail from "./components/Task/TaskDetail";
 const App = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const location = useLocation();
 	const user = JSON.parse(localStorage.getItem("profile"));
 	const { authData } = useSelector(state => state.auth);
+	const { error, message } = useSelector(state => state.tasks);
 
 	useEffect(() => {
 		if (user) {
@@ -30,8 +32,6 @@ const App = () => {
 
 			if (token) {
 				const decodedToken = decode(token);
-				console.log(new Date(decodedToken.exp * 1000));
-				console.log(decodedToken.exp * 1000 < new Date().getTime());
 				if (decodedToken.exp * 1000 < new Date().getTime()) {
 					dispatch({ type: "LOGOUT" });
 					dispatch({ type: "CLEAR_ERROR" });
@@ -44,7 +44,13 @@ const App = () => {
 
 			dispatch(getTasks());
 		}
-	}, [dispatch]);
+		if (error) {
+			toast.error(error);
+		}
+		if (message) {
+			toast.success(message);
+		}
+	}, [dispatch, error, message]);
 
 	const mainPageStyle = {
 		left: "250px",
@@ -62,7 +68,9 @@ const App = () => {
 			/>
 			{authData && <Navbar />}
 			<div className='page-content' style={authData && mainPageStyle}>
-				{authData && <FloatingButton />}
+				{authData && !location.pathname.includes("/chats") && (
+					<FloatingButton />
+				)}
 				<Switch>
 					<PrivateRoute path='/' component={Today} exact />
 					<PrivateRoute path='/tasks/:id' component={TaskDetail} />

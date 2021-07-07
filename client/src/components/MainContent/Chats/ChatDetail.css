@@ -60,6 +60,45 @@
     padding:15px;
 }
 
+.chatMessages .message{
+    padding-bottom: 2px;
+    list-style: none;
+    display:flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+    -webkit-flex:0;
+}
+
+.chatMessages .message.mine{
+    flex-direction: row-reverse;
+}
+
+.chatMessages .message.mine .messageBody{
+    background-color:rgb(42, 158, 252);
+    color:#fff;
+}
+
+.chatMessages .message .messageBody{
+    background-color: #f1f0f0;
+    padding:6px 12px;
+    border-radius: 18px;
+    font-size:14px;
+}
+
+.chatMessages .message .messageContainer{
+    display: flex;
+    flex-direction:column;
+    max-width: 35%;
+}
+
+.chatMessages .message.mine .messageContainer{
+    align-items:flex-end;
+}
+
+.chatMessages .message.theirs .messageContainer{
+    align-items:flex-start;
+}
+
 .chatImagesContainer{
     display: flex;
     flex-direction:row-reverse;
@@ -87,4 +126,21 @@
 
 .chatImagesContainer img:not(:last-child),.chatImagesContainer .userCount{
     margin-left: -10px;
+}
+
+.senderName{
+    color: rgba(0,0,0,0.4);
+}
+
+.typingDots{
+    padding:15px;
+    padding-bottom: 0;
+    display: none;
+}
+
+.typingDots img{
+    background-color: #f1f0f0;
+    padding:6px 12px;
+    border-radius: 18px;
+    height:35px;
 }

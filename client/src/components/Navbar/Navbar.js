@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { Image } from "semantic-ui-react";
@@ -10,21 +9,11 @@ const Navbar = () => {
 	const history = useHistory();
 	const location = useLocation();
 	const [sidebar, setSidebar] = useState(false);
-	const { error, message } = useSelector(state => state.tasks);
 	const dispatch = useDispatch();
 
 	const { authData } = useSelector(state => state.auth);
 
 	const showSidebar = () => setSidebar(!sidebar);
-
-	useEffect(() => {
-		if (error) {
-			toast.error(error);
-		}
-		if (message) {
-			toast.success(message);
-		}
-	}, [error, message]);
 
 	return (
 		<>
