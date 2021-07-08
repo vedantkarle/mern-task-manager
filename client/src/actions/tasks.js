@@ -241,3 +241,24 @@ export const removeMember = (taskId, memberId) => async dispatch => {
 		});
 	}
 };
+
+export const getNotifications = () => async dispatch => {
+	try {
+		dispatch({ type: "START_LOADING" });
+
+		const { data } = await api.getNotifications();
+
+		dispatch({ type: "FETCH_NOTIFICATIONS", payload: data });
+
+		dispatch({ type: "END_LOADING" });
+	} catch (error) {
+		console.log(error);
+		dispatch({
+			type: "SET_ERROR",
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};

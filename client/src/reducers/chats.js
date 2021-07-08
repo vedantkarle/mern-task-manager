@@ -16,11 +16,11 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				chat: payload,
 			};
-		// case "SEND_MESSAGE":
-		// 	return {
-		// 		...state,
-		// 		messages: [...state.messages, payload],
-		// 	};
+		case "SEND_MESSAGE":
+			return {
+				...state,
+				messages: [...state.messages, payload],
+			};
 		case "FETCH_MESSAGES":
 			return {
 				...state,

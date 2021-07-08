@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Todo = require("../models/todoModel");
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
+const Notification = require("../models/notificationModel");
 
 exports.getTasks = asyncHandler(async (req, res) => {
 	try {
@@ -144,6 +145,15 @@ exports.addTodo = asyncHandler(async (req, res) => {
 			.populate("owner")
 			.populate("todos")
 			.populate("members");
+
+		task.members.forEach(async member => {
+			await Notification.insertNotification(
+				member._id,
+				req.user._id,
+				"todo",
+				task._id
+			);
+		});
 
 		res.json(task);
 	} catch (error) {
@@ -292,6 +302,15 @@ exports.addMembers = asyncHandler(async (req, res) => {
 			},
 			{ new: true }
 		);
+
+		members.forEach(async member => {
+			await Notification.insertNotification(
+				member,
+				req.user._id,
+				"member",
+				task._id
+			);
+		});
 
 		res.json(task);
 	} catch (error) {

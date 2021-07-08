@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
 	Card,
@@ -27,8 +27,6 @@ const Task = ({
 	userEmail,
 }) => {
 	const dispatch = useDispatch();
-
-	const { authData } = useSelector(state => state.auth);
 
 	const completedTodos = todos.filter(todo => todo.completed === true);
 

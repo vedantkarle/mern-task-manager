@@ -1,6 +1,7 @@
 const initialState = {
 	tasks: [],
 	task: null,
+	notifications: [],
 	loading: false,
 	error: null,
 	message: null,
@@ -59,6 +60,11 @@ export default (state = initialState, { type, payload }) => {
 		case "DELETE_TODO":
 			return {
 				...state,
+			};
+		case "FETCH_NOTIFICATIONS":
+			return {
+				...state,
+				notifications: payload,
 			};
 		case "SET_ERROR":
 			return {

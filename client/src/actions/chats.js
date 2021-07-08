@@ -47,11 +47,10 @@ export const sendMessage = (message, chatId) => async dispatch => {
 	try {
 		dispatch({ type: "START_LOADING" });
 
-		await api.sendMessage(message, chatId);
+		const { data } = await api.sendMessage(message, chatId);
 
-		const { data } = await api.getMessages(chatId);
+		dispatch({ type: "SEND_MESSAGE", payload: data });
 
-		dispatch({ type: "FETCH_MESSAGES", payload: data });
 		dispatch({ type: "END_LOADING" });
 	} catch (error) {
 		console.log(error);

@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
 const Message = require("../models/messageModel");
+const User = require("../models/userModel");
 
 exports.getMessages = asyncHandler(async (req, res) => {
 	const { chatId } = req.params;
@@ -22,11 +22,15 @@ exports.sendMessage = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: "Invalid Data Passed" });
 		}
 
-		const newMessage = await Message.create({
+		let newMessage = await Message.create({
 			sender: req.user._id,
 			content: req.body.message,
 			chat: req.body.chatId,
 		});
+
+		newMessage = await newMessage.populate("sender").execPopulate();
+		newMessage = await newMessage.populate("chat").execPopulate();
+		newMessage = await User.populate(newMessage, { path: "chat.users" });
 
 		await Chat.findByIdAndUpdate(req.body.chatId, {
 			latestMessage: newMessage,

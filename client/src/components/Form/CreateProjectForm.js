@@ -27,7 +27,6 @@ const CreateProjectForm = () => {
 	});
 
 	const handleSubmit = values => {
-		console.log(values);
 		dispatch(createTask(values));
 	};
 

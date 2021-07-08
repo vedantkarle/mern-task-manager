@@ -1,7 +1,6 @@
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import {
 	Button,
 	Checkbox,
@@ -33,8 +32,6 @@ const TaskDetail = ({ match }) => {
 	}, [dispatch]);
 
 	if (loading && !task && !error) return <LoadingComponent />;
-
-	if (error) return <Redirect to='/error' />;
 
 	return (
 		<div className='task-detail'>

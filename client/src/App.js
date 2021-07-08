@@ -3,19 +3,22 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import io from "socket.io-client";
 import { getTasks } from "./actions/tasks";
 import "./App.css";
 import ErrorComponent from "./components/Error/ErrorComponent";
 import FloatingButton from "./components/FloatingButton";
 import Login from "./components/Form/Login";
 import Register from "./components/Form/Register";
-import ChatDetail from "./components/MainContent/Chats/ChatDetail";
-import Chats from "./components/MainContent/Chats/Chats";
+import Notifications from "./components/MainContent/Notifications/Notifications";
 import Today from "./components/MainContent/Today/Today";
 import ModalManager from "./components/Modal/ModalManager";
 import Navbar from "./components/Navbar/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import TaskDetail from "./components/Task/TaskDetail";
+
+let socket;
+var connected = false;
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -24,9 +27,21 @@ const App = () => {
 	const user = JSON.parse(localStorage.getItem("profile"));
 	const { authData } = useSelector(state => state.auth);
 	const { error, message } = useSelector(state => state.tasks);
+	const ENDPONT = "localhost:5000";
 
 	useEffect(() => {
 		if (user) {
+			socket = io(ENDPONT);
+			socket.emit("setup", user.result);
+			socket.on("connected", () => (connected = true));
+
+			if (connected) {
+				socket.on("message received", newMessage => {
+					console.log(newMessage);
+					messageReceived(newMessage);
+				});
+			}
+
 			const result = user.result;
 			const token = user.token;
 
@@ -44,13 +59,22 @@ const App = () => {
 
 			dispatch(getTasks());
 		}
+
 		if (error) {
 			toast.error(error);
 		}
 		if (message) {
 			toast.success(message);
 		}
-	}, [dispatch, error, message]);
+	}, [dispatch, error, message, ENDPONT]);
+
+	const messageReceived = newMessage => {
+		if (!location.pathname.includes("/chats")) {
+		} else {
+			console.log("Message Received");
+			dispatch({ type: "SEND_MESSAGE", payload: newMessage });
+		}
+	};
 
 	const mainPageStyle = {
 		left: "250px",
@@ -75,8 +99,8 @@ const App = () => {
 					<PrivateRoute path='/' component={Today} exact />
 					<PrivateRoute path='/tasks/:id' component={TaskDetail} />
 					<PrivateRoute path='/projects' component={Today} exact />
-					<PrivateRoute path='/chats' component={Chats} exact />
-					<PrivateRoute path='/chats/:id' component={ChatDetail} exact />
+					<PrivateRoute path='/notifications' component={Notifications} exact />
+					{/* <PrivateRoute path='/chats/:id' component={ChatDetail} exact /> */}
 					<Route path='/login' component={Login} exact />
 					<Route path='/register' component={Register} exact />
 					<Route path='*' component={ErrorComponent} exact />

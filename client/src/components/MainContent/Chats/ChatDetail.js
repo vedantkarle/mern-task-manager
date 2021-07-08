@@ -1,68 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
-import io from "socket.io-client";
-import { fetchSingleChat, sendMessage } from "../../../actions/chats";
+import { io } from "socket.io-client";
+import * as api from "../../../api";
 import dots from "../../../images/dots.gif";
 import LoadingComponent from "../../LoadingComponent";
 import "./ChatDetail.css";
 
-let socket;
-var connected = false;
-var typing = false;
-var lastTypingtime;
+const ENDPONT = "ws://localhost:5500";
 
 const ChatDetail = ({ match }) => {
 	const id = match.params.id;
+	const location = useLocation();
 	const dispatch = useDispatch();
 	const { loading, error } = useSelector(state => state.tasks);
-	const { chat, messages } = useSelector(state => state.chats);
+	const { chat } = useSelector(state => state.chats);
 	const { authData } = useSelector(state => state.auth);
 	const [message, setMessage] = useState("");
-	const ENDPONT = "localhost:5000";
+	const [messages, setMessages] = useState([]);
+	const [arrivalMessage, setArrivalMessage] = useState(null);
+	const socket = useRef(io(ENDPONT));
 	const { result } = JSON.parse(localStorage.getItem("profile"));
 
 	useEffect(() => {
-		dispatch(fetchSingleChat(id));
-		socket = io(ENDPONT);
-		socket.emit("setup", result);
-		socket.on("connected", () => (connected = true));
+		socket.current.on("message received", message => {
+			setMessages([...messages, message]);
+		});
+	}, [messages]);
 
-		socket.emit("join room", id);
+	useEffect(() => {
+		socket.current.emit("join room", chat?._id);
 
-		socket.on(
-			"typing",
-			() => (document.querySelector(".typingDots").style.display = "block")
-		);
-		socket.on(
-			"stop typing",
-			() => (document.querySelector(".typingDots").style.display = "none")
-		);
-	}, [ENDPONT, dispatch]);
+		const getSingleChat = async () => {
+			try {
+				dispatch({ type: "START_LOADING" });
+				const { data } = await api.fetchSingleChat(id);
 
-	const updateTyping = () => {
-		if (!connected) return;
+				dispatch({ type: "FETCH_SINGLE_CHAT", payload: data });
 
-		if (!typing) {
-			typing = true;
-			socket.emit("typing", id);
-		}
+				const res = await api.getMessages(id);
 
-		lastTypingtime = new Date().getTime();
+				setMessages(res.data);
 
-		var timerLength = 3000;
-
-		setTimeout(() => {
-			var timeNow = new Date().getTime();
-			var timeDiff = timeNow - lastTypingtime;
-
-			if (timeDiff >= timerLength && typing) {
-				socket.emit("stop typing", id);
-				typing = false;
+				dispatch({ type: "END_LOADING" });
+			} catch (error) {
+				console.log(error);
+				dispatch({
+					type: "SET_ERROR",
+					payload:
+						error.response && error.response.data.message
+							? error.response.data.message
+							: error.message,
+				});
 			}
-		}, timerLength);
-	};
+		};
+
+		getSingleChat();
+	}, [socket, dispatch]);
 
 	const handleSendMessage = e => {
 		if (e.which === 13 && !e.shiftKey) {
@@ -77,13 +72,32 @@ const ChatDetail = ({ match }) => {
 		if (content !== "") {
 			sendNewMessage(content);
 			setMessage("");
-			socket.emit("stop typing", id);
-			typing = false;
 		}
 	};
 
-	const sendNewMessage = content => {
-		dispatch(sendMessage(content, chat?._id));
+	const sendNewMessage = async content => {
+		try {
+			dispatch({ type: "START_LOADING" });
+
+			const { data } = await api.sendMessage(content, chat?._id);
+
+			setMessages([...messages, data]);
+
+			socket.current.emit("new message", data);
+
+			// dispatch({ type: "SEND_MESSAGE", payload: data });
+
+			dispatch({ type: "END_LOADING" });
+		} catch (error) {
+			console.log(error);
+			dispatch({
+				type: "SET_ERROR",
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+			});
+		}
 	};
 
 	if (loading && !chat && !error) return <LoadingComponent />;
@@ -113,7 +127,7 @@ const ChatDetail = ({ match }) => {
 				<div className='mainContentContainer'>
 					<div className='chatContainer'>
 						<ScrollToBottom className='chatMessages'>
-							<ul>
+							<ul className='messages'>
 								{messages?.map((message, index) => {
 									// var lastSender = "";
 									// var nextMessage;
@@ -155,7 +169,6 @@ const ChatDetail = ({ match }) => {
 								name='messageInput'
 								placeholder='Type a message...'
 								onKeyDown={e => {
-									updateTyping();
 									handleSendMessage(e);
 								}}
 								onChange={e => setMessage(e.target.value)}
