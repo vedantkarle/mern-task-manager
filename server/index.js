@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const http = require("http");
 const app = express();
+const Pusher = require("pusher");
 require("dotenv").config();
 
 const taskRoutes = require("./routes/tasks");
@@ -18,6 +19,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const server = http.createServer(app);
+
+const pusher = new Pusher({
+	appId: "1233150",
+	key: "3a0344f04d73dd86262c",
+	secret: "5f168bf279d60264aca5",
+	cluster: "ap2",
+	useTLS: true,
+});
+
+const db = mongoose.connection;
 
 app.use("/api/tasks", taskRoutes);
 app.use("/api/user", userRoutes);
@@ -49,3 +60,16 @@ mongoose
 	.catch(e => {
 		console.error(e.message);
 	});
+
+db.once("open", () => {
+	console.log("DB Connected");
+	const notifications = db.collection("notifications");
+	const changeStream = notifications.watch();
+
+	changeStream.on("change", change => {
+		if (change.operationType === "insert") {
+			const notificationDetails = change.fullDocument;
+			pusher.trigger("notifications", "inserted", notificationDetails);
+		}
+	});
+});

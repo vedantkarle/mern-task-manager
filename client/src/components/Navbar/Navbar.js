@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { Image } from "semantic-ui-react";
+import { getNotifications } from "../../actions/tasks";
 import "./Navbar.css";
 import { SidebarData } from "./SidebarData";
 
@@ -16,11 +17,13 @@ const Navbar = () => {
 
 	const showSidebar = () => setSidebar(!sidebar);
 
+	useEffect(() => {
+		dispatch(getNotifications());
+	}, [dispatch]);
+
 	const unreadNotifications = notifications?.filter(
 		notification => notification.opened === false
 	);
-
-	console.log(unreadNotifications);
 
 	return (
 		<>

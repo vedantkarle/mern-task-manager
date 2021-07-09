@@ -66,6 +66,11 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				notifications: payload,
 			};
+		case "SET_NOTIFICATIONS":
+			return {
+				...state,
+				notifications: [...state.notifications, payload],
+			};
 		case "SET_ERROR":
 			return {
 				...state,

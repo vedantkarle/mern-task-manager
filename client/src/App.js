@@ -3,8 +3,7 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
-import io from "socket.io-client";
-import { getNotifications, getTasks } from "./actions/tasks";
+import { getTasks } from "./actions/tasks";
 import "./App.css";
 import ErrorComponent from "./components/Error/ErrorComponent";
 import FloatingButton from "./components/FloatingButton";
@@ -17,9 +16,6 @@ import Navbar from "./components/Navbar/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import TaskDetail from "./components/Task/TaskDetail";
 
-let socket;
-var connected = false;
-
 const App = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -27,21 +23,9 @@ const App = () => {
 	const user = JSON.parse(localStorage.getItem("profile"));
 	const { authData } = useSelector(state => state.auth);
 	const { error, message } = useSelector(state => state.tasks);
-	const ENDPONT = "localhost:5000";
 
 	useEffect(() => {
 		if (user) {
-			socket = io(ENDPONT);
-			socket.emit("setup", user.result);
-			socket.on("connected", () => (connected = true));
-
-			if (connected) {
-				socket.on("message received", newMessage => {
-					console.log(newMessage);
-					messageReceived(newMessage);
-				});
-			}
-
 			const result = user.result;
 			const token = user.token;
 
@@ -58,7 +42,6 @@ const App = () => {
 			dispatch({ type: "AUTH", data: { result, token } });
 
 			dispatch(getTasks());
-			dispatch(getNotifications());
 		}
 
 		if (error) {
@@ -67,15 +50,7 @@ const App = () => {
 		if (message) {
 			toast.success(message);
 		}
-	}, [dispatch, error, message, ENDPONT]);
-
-	const messageReceived = newMessage => {
-		if (!location.pathname.includes("/chats")) {
-		} else {
-			console.log("Message Received");
-			dispatch({ type: "SEND_MESSAGE", payload: newMessage });
-		}
-	};
+	}, [dispatch, error, message]);
 
 	const mainPageStyle = {
 		left: "250px",

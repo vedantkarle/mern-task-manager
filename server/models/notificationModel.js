@@ -3,12 +3,26 @@ const mongoose = require("mongoose");
 const notificationSchema = mongoose.Schema(
 	{
 		userTo: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			name: {
+				type: String,
+			},
+			email: {
+				type: String,
+			},
+			photoUrl: {
+				type: String,
+			},
 		},
 		userFrom: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			name: {
+				type: String,
+			},
+			email: {
+				type: String,
+			},
+			photoUrl: {
+				type: String,
+			},
 		},
 		notificationType: {
 			type: String,

@@ -154,8 +154,16 @@ exports.addTodo = asyncHandler(async (req, res) => {
 			task.members.forEach(async member => {
 				if (member.email !== req.user.email) {
 					await Notification.insertNotification(
-						member._id,
-						req.user._id,
+						{
+							name: member.name,
+							email: member.email,
+							photoUrl: member.photoUrl,
+						},
+						{
+							name: req.user.name,
+							email: req.user.email,
+							photoUrl: req.user.photoUrl,
+						},
 						"todo",
 						task._id
 					);
@@ -313,8 +321,16 @@ exports.addMembers = asyncHandler(async (req, res) => {
 
 		members.forEach(async member => {
 			await Notification.insertNotification(
-				member,
-				req.user._id,
+				{
+					name: member.name,
+					email: member.email,
+					photoUrl: member.photoUrl,
+				},
+				{
+					name: req.user.name,
+					email: req.user.email,
+					photoUrl: req.user.photoUrl,
+				},
 				"member",
 				task._id
 			);
