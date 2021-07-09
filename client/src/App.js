@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import io from "socket.io-client";
-import { getTasks } from "./actions/tasks";
+import { getNotifications, getTasks } from "./actions/tasks";
 import "./App.css";
 import ErrorComponent from "./components/Error/ErrorComponent";
 import FloatingButton from "./components/FloatingButton";
@@ -58,6 +58,7 @@ const App = () => {
 			dispatch({ type: "AUTH", data: { result, token } });
 
 			dispatch(getTasks());
+			dispatch(getNotifications());
 		}
 
 		if (error) {

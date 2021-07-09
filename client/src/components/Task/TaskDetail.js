@@ -139,18 +139,21 @@ const TaskDetail = ({ match }) => {
 													<img src={member?.photoUrl} />
 												</Feed.Label>
 												<Feed.Content>
-													{member?.name}{" "}
-													{task?.owner?.email === authData?.result?.email && (
-														<Button
-															color='red'
-															icon='remove'
-															size='mini'
-															circular
-															onClick={() =>
-																dispatch(removeMember(task?._id, member?._id))
-															}
-														/>
-													)}
+													{member?.email == authData.result.email
+														? "You"
+														: member?.name}{" "}
+													{task?.owner?.email === authData?.result?.email &&
+														task?.owner?.email !== member.email && (
+															<Button
+																color='red'
+																icon='remove'
+																size='mini'
+																circular
+																onClick={() =>
+																	dispatch(removeMember(task?._id, member?._id))
+																}
+															/>
+														)}
 												</Feed.Content>
 											</Feed.Event>
 										</Feed>

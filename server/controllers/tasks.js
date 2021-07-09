@@ -63,6 +63,10 @@ exports.createTask = asyncHandler(async (req, res) => {
 
 		const newTask = await Task.create({ ...task, owner: req.user._id });
 
+		newTask.members.push(req.user._id);
+
+		await newTask.save();
+
 		await Chat.create({
 			chatName: newTask.projectName,
 			users: [req.user],
@@ -146,14 +150,18 @@ exports.addTodo = asyncHandler(async (req, res) => {
 			.populate("todos")
 			.populate("members");
 
-		task.members.forEach(async member => {
-			await Notification.insertNotification(
-				member._id,
-				req.user._id,
-				"todo",
-				task._id
-			);
-		});
+		if (task.members.length > 0) {
+			task.members.forEach(async member => {
+				if (member.email !== req.user.email) {
+					await Notification.insertNotification(
+						member._id,
+						req.user._id,
+						"todo",
+						task._id
+					);
+				}
+			});
+		}
 
 		res.json(task);
 	} catch (error) {

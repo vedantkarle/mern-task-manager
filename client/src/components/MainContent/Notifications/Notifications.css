@@ -3,14 +3,60 @@
 }
 
 .title{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
     padding:14px;
+    padding-bottom: 0;
     border-bottom: 1px solid #eee;
 }
 
+.markAsOpened{
+    background:none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(0, 162, 255);
+}
+
+
 .resultListItem{
-    padding:14px;
+    padding:6px;
+    color:#000;
     display: flex;
     align-items: center;
     flex-shrink: 0;
     border-bottom: 1px solid #eee;
+}
+
+.resultListItem:hover{
+    background-color:#F2F2F2;
+    color:#000;
+}
+
+.resultListItem.active{
+    background-color:#ceebf8;
+}
+
+
+.resultListItem img{
+    height:65%;
+    width:65%;
+    border-radius: 50%;
+}
+
+.resultsImageContainer{
+    height:50px;
+    width:50px;
+    position: relative;
+    margin-right: 5px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.ellipsis{
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

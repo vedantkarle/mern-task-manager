@@ -12,8 +12,15 @@ const Navbar = () => {
 	const dispatch = useDispatch();
 
 	const { authData } = useSelector(state => state.auth);
+	const { notifications } = useSelector(state => state.tasks);
 
 	const showSidebar = () => setSidebar(!sidebar);
+
+	const unreadNotifications = notifications?.filter(
+		notification => notification.opened === false
+	);
+
+	console.log(unreadNotifications);
 
 	return (
 		<>
@@ -45,6 +52,15 @@ const Navbar = () => {
 										<Link to={data.path}>
 											<i className={data.icon}></i>
 											<span>{data.title}</span>
+											{data.notification && (
+												<span
+													id='notificationBadge'
+													className={
+														unreadNotifications.length > 0 ? "active" : ""
+													}>
+													{unreadNotifications?.length}
+												</span>
+											)}
 										</Link>
 									</li>
 								);

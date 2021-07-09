@@ -16,6 +16,7 @@ export const SidebarData = [
 		path: "/notifications",
 		icon: "far fa-bell",
 		cName: "nav-text",
+		notification: true,
 	},
 	{
 		title: "Reports",

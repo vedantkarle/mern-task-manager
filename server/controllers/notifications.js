@@ -16,3 +16,22 @@ exports.getNotifications = asyncHandler(async (req, res) => {
 		res.status(400).json({ message: error.message });
 	}
 });
+
+exports.markOpened = asyncHandler(async (req, res) => {
+	try {
+		await Notification.findByIdAndUpdate(req.params.id, { opened: true });
+		res.sendStatus(204);
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+});
+
+exports.markAllOpened = asyncHandler(async (req, res) => {
+	try {
+		await Notification.updateMany({ userTo: req.user._id }, { opened: true });
+		res.sendStatus(204);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
