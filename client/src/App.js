@@ -1,4 +1,5 @@
 import decode from "jwt-decode";
+import Pusher from "pusher-js";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,8 @@ import ErrorComponent from "./components/Error/ErrorComponent";
 import FloatingButton from "./components/FloatingButton";
 import Login from "./components/Form/Login";
 import Register from "./components/Form/Register";
+import ChatDetail from "./components/MainContent/Chats/ChatDetail";
+import Chats from "./components/MainContent/Chats/Chats";
 import Notifications from "./components/MainContent/Notifications/Notifications";
 import Today from "./components/MainContent/Today/Today";
 import ModalManager from "./components/Modal/ModalManager";
@@ -52,6 +55,40 @@ const App = () => {
 		}
 	}, [dispatch, error, message]);
 
+	useEffect(() => {
+		var pusher = new Pusher("3a0344f04d73dd86262c", {
+			cluster: "ap2",
+		});
+
+		var channel = pusher.subscribe("notifications");
+		channel.bind("inserted", function (data) {
+			dispatch({ type: "SET_NOTIFICATIONS", payload: data });
+		});
+		return () => {
+			channel.unbind_all();
+			channel.unsubscribe();
+		};
+	}, [dispatch]);
+
+	useEffect(() => {
+		var pusher = new Pusher("3a0344f04d73dd86262c", {
+			cluster: "ap2",
+		});
+
+		var channel = pusher.subscribe("messages");
+		channel.bind("inserted", function (data) {
+			toast(t => (
+				<span onClick={() => history.push(`/chats/${data.chat}`)}>
+					<b>{data.sender.name}</b>: {data.content}
+				</span>
+			));
+		});
+		return () => {
+			channel.unbind_all();
+			channel.unsubscribe();
+		};
+	}, []);
+
 	const mainPageStyle = {
 		left: "250px",
 		marginTop: "80px",
@@ -76,7 +113,8 @@ const App = () => {
 					<PrivateRoute path='/tasks/:id' component={TaskDetail} />
 					<PrivateRoute path='/projects' component={Today} exact />
 					<PrivateRoute path='/notifications' component={Notifications} exact />
-					{/* <PrivateRoute path='/chats/:id' component={ChatDetail} exact /> */}
+					<PrivateRoute path='/chats/' component={Chats} exact />
+					<PrivateRoute path='/chats/:id' component={ChatDetail} exact />
 					<Route path='/login' component={Login} exact />
 					<Route path='/register' component={Register} exact />
 					<Route path='*' component={ErrorComponent} exact />

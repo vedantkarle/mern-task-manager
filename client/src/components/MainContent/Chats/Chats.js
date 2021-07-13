@@ -36,9 +36,11 @@ const Chats = () => {
 						</div>
 						<div className='resultDetailsContainer  ellipsis'>
 							<span className='heading  ellipsis'>{chat?.chatName}</span>
-							<span className='subText  ellipsis'>
-								{sender} : {chat?.latestMessage?.content}
-							</span>
+							{chat.latestMessage && (
+								<span className='subText  ellipsis'>
+									{sender} : {chat?.latestMessage?.content}
+								</span>
+							)}
 						</div>
 					</Link>
 				);

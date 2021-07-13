@@ -9,7 +9,14 @@ const chatSchema = mongoose.Schema(
 				ref: "User",
 			},
 		],
-		latestMessage: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
+		latestMessage: {
+			sender: {
+				name: String,
+				email: String,
+			},
+			content: { type: String, trim: true },
+			chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
+		},
 	},
 	{ timestamps: true }
 );

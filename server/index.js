@@ -64,12 +64,23 @@ mongoose
 db.once("open", () => {
 	console.log("DB Connected");
 	const notifications = db.collection("notifications");
-	const changeStream = notifications.watch();
+	const messages = db.collection("messages");
+	const changeStream1 = notifications.watch();
+	const changeStream2 = messages.watch();
 
-	changeStream.on("change", change => {
+	changeStream1.on("change", change => {
 		if (change.operationType === "insert") {
 			const notificationDetails = change.fullDocument;
 			pusher.trigger("notifications", "inserted", notificationDetails);
+		}
+	});
+
+	changeStream2.on("change", change => {
+		if (change.operationType === "insert") {
+			const messageDetails = change.fullDocument;
+			pusher.trigger("messages", "inserted", messageDetails);
+		} else {
+			console.log("Error triggering pusher");
 		}
 	});
 });

@@ -12,6 +12,12 @@ export const SidebarData = [
 		cName: "nav-text",
 	},
 	{
+		title: "Chats",
+		path: "/chats",
+		icon: "fas fa-comments",
+		cName: "nav-text",
+	},
+	{
 		title: "Notifications",
 		path: "/notifications",
 		icon: "far fa-bell",

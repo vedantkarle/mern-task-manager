@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import Pusher from "pusher-js";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { io } from "socket.io-client";
 import * as api from "../../../api";
 import dots from "../../../images/dots.gif";
 import LoadingComponent from "../../LoadingComponent";
 import "./ChatDetail.css";
-
-const ENDPONT = "ws://localhost:5500";
 
 const ChatDetail = ({ match }) => {
 	const id = match.params.id;
@@ -19,19 +17,26 @@ const ChatDetail = ({ match }) => {
 	const { authData } = useSelector(state => state.auth);
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
-	const [arrivalMessage, setArrivalMessage] = useState(null);
-	const socket = useRef(io(ENDPONT));
 	const { result } = JSON.parse(localStorage.getItem("profile"));
 
 	useEffect(() => {
-		socket.current.on("message received", message => {
-			setMessages([...messages, message]);
+		var pusher = new Pusher("3a0344f04d73dd86262c", {
+			cluster: "ap2",
 		});
+
+		var channel = pusher.subscribe("messages");
+		channel.bind("inserted", function (data) {
+			if (data.chat === id) {
+				setMessages([...messages, data]);
+			}
+		});
+		return () => {
+			channel.unbind_all();
+			channel.unsubscribe();
+		};
 	}, [messages]);
 
 	useEffect(() => {
-		socket.current.emit("join room", chat?._id);
-
 		const getSingleChat = async () => {
 			try {
 				dispatch({ type: "START_LOADING" });
@@ -57,7 +62,7 @@ const ChatDetail = ({ match }) => {
 		};
 
 		getSingleChat();
-	}, [socket, dispatch]);
+	}, [dispatch]);
 
 	const handleSendMessage = e => {
 		if (e.which === 13 && !e.shiftKey) {
@@ -82,8 +87,6 @@ const ChatDetail = ({ match }) => {
 			const { data } = await api.sendMessage(content, chat?._id);
 
 			setMessages([...messages, data]);
-
-			socket.current.emit("new message", data);
 
 			// dispatch({ type: "SEND_MESSAGE", payload: data });
 

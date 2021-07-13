@@ -22,7 +22,9 @@ const Navbar = () => {
 	}, [dispatch]);
 
 	const unreadNotifications = notifications?.filter(
-		notification => notification.opened === false
+		notification =>
+			notification.opened === false &&
+			notification.userTo.email === authData?.result.email
 	);
 
 	return (

@@ -1,5 +1,4 @@
 import axios from "axios";
-import Pusher from "pusher-js";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -15,21 +14,6 @@ const Notifications = () => {
 
 	useEffect(() => {
 		dispatch(getNotifications());
-	}, [dispatch]);
-
-	useEffect(() => {
-		var pusher = new Pusher("3a0344f04d73dd86262c", {
-			cluster: "ap2",
-		});
-
-		var channel = pusher.subscribe("notifications");
-		channel.bind("inserted", function (data) {
-			dispatch({ type: "SET_NOTIFICATIONS", payload: data });
-		});
-		return () => {
-			channel.unbind_all();
-			channel.unsubscribe();
-		};
 	}, [dispatch]);
 
 	const getNotificationText = notification => {

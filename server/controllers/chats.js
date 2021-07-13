@@ -9,13 +9,11 @@ exports.getChats = asyncHandler(async (req, res) => {
 			users: { $elemMatch: { $eq: req.user._id } },
 		})
 			.populate("users")
-			.populate("latestMessage")
 			.sort({ updatedAt: -1 });
-
-		chats = await User.populate(chats, { path: "latestMessage.sender" });
 
 		res.json(chats);
 	} catch (error) {
+		console.log(error);
 		res.status(400).json({ message: error.message });
 	}
 });
