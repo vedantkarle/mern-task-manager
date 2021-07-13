@@ -96,7 +96,7 @@ const Notifications = () => {
 								<div className='resultsImageContainer'>
 									<img src={notification?.userFrom.photoUrl} />
 								</div>
-								<div className='resultsDetailsContainer ellipsis'>
+								<div>
 									<span className='ellipsis'>
 										{getNotificationText(notification)}
 									</span>

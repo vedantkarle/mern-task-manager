@@ -77,11 +77,11 @@ const App = () => {
 
 		var channel = pusher.subscribe("messages");
 		channel.bind("inserted", function (data) {
-			toast(t => (
-				<span onClick={() => history.push(`/chats/${data.chat}`)}>
-					<b>{data.sender.name}</b>: {data.content}
-				</span>
-			));
+			if (
+				data.sender.email !== authData?.result.email &&
+				!location.pathname.includes("/chats")
+			) {
+			}
 		});
 		return () => {
 			channel.unbind_all();

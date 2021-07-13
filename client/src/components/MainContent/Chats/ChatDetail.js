@@ -26,7 +26,7 @@ const ChatDetail = ({ match }) => {
 
 		var channel = pusher.subscribe("messages");
 		channel.bind("inserted", function (data) {
-			if (data.chat === id) {
+			if (data.chat === chat?._id) {
 				setMessages([...messages, data]);
 			}
 		});
@@ -115,7 +115,7 @@ const ChatDetail = ({ match }) => {
 				<div className='chatTitleBarContainer'>
 					<div className='chatImagesContainer'>
 						{chat?.users?.map((user, index) => {
-							var maxImagesToShow = 1;
+							var maxImagesToShow = 2;
 							var remainingUsers = chat?.users?.length - maxImagesToShow;
 							remainingUsers--;
 							if (index < 3 && user.email !== authData.result.email)

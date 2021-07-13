@@ -12,8 +12,6 @@ const chatRoutes = require("./routes/chats");
 const messageRoutes = require("./routes/messages");
 const notificationRoutes = require("./routes/notifications");
 
-const globalErrorHandler = require("./controllers/error");
-
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -39,8 +37,6 @@ app.use("/api/notifications", notificationRoutes);
 app.all("*", (req, res, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
-
-app.use(globalErrorHandler);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 

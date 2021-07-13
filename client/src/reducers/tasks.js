@@ -19,16 +19,19 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				loading: false,
+				error: null,
 			};
 		case "FETCH_ALL":
 			return {
 				...state,
 				tasks: payload,
+				error: null,
 			};
 		case "FETCH_SINGLE_TASK":
 			return {
 				...state,
 				task: payload,
+				error: null,
 			};
 		case "UPDATE":
 			return {
@@ -37,39 +40,47 @@ export default (state = initialState, { type, payload }) => {
 					task._id === payload.updatedTask._id ? payload.updatedTask : task
 				),
 				message: payload.message,
+				error: null,
 			};
 		case "DELETE":
 			return {
 				...state,
 				tasks: state.tasks.filter(task => task._id !== payload.id),
 				message: payload.message,
+				error: null,
 			};
 		case "CREATE":
 			return {
 				...state,
 				tasks: [...state.tasks, payload],
+				error: null,
 			};
 		case "ADD_TODO":
 			return {
 				...state,
+				error: null,
 			};
 		case "EDIT_TODO":
 			return {
 				...state,
+				error: null,
 			};
 		case "DELETE_TODO":
 			return {
 				...state,
+				error: null,
 			};
 		case "FETCH_NOTIFICATIONS":
 			return {
 				...state,
 				notifications: payload,
+				error: null,
 			};
 		case "SET_NOTIFICATIONS":
 			return {
 				...state,
 				notifications: [...state.notifications, payload],
+				error: null,
 			};
 		case "SET_ERROR":
 			return {

@@ -75,22 +75,23 @@ exports.register = async (req, res) => {
 };
 
 exports.addGoogleUserToDb = asyncHandler(async (req, res) => {
-	const { user, key } = req.body;
+	const { name, email, photoUrl, verified, userType, key } = req.body;
 
 	try {
 		if (!key) {
 			return res.status(403).json({ message: "Access Forbidden!" });
 		}
 
-		const existingUser = await User.findOne({ email: user.email });
+		const existingUser = await User.findOne({ email: email });
 
 		if (existingUser) {
 			return res.status(200).json({ message: "Welcome Back!" });
 		}
 
-		const newUser = await User.create(user);
+		await User.create({ name, email, photoUrl, verified, userType });
 		res.status(200).json({ message: "Welcome To Tasky!" });
 	} catch (error) {
+		console.log(error);
 		res.status(404).json({ message: "Something went wrong!" });
 	}
 });
