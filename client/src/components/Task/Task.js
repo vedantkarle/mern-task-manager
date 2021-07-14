@@ -81,7 +81,9 @@ const Task = ({
 									content={member?.email}
 									key={member?._id}
 									header={member?.name}
-									trigger={<Image src={member?.photoUrl} avatar />}
+									trigger={
+										<Image src={member?.photoUrl || member?.imageUrl} avatar />
+									}
 								/>
 							);
 						})}

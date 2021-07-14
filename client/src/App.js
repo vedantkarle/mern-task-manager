@@ -17,6 +17,7 @@ import Today from "./components/MainContent/Today/Today";
 import ModalManager from "./components/Modal/ModalManager";
 import Navbar from "./components/Navbar/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
+import "./components/Snackbar/Snackbar.css";
 import TaskDetail from "./components/Task/TaskDetail";
 
 const App = () => {
@@ -69,25 +70,6 @@ const App = () => {
 			channel.unsubscribe();
 		};
 	}, [dispatch]);
-
-	useEffect(() => {
-		var pusher = new Pusher("3a0344f04d73dd86262c", {
-			cluster: "ap2",
-		});
-
-		var channel = pusher.subscribe("messages");
-		channel.bind("inserted", function (data) {
-			if (
-				data.sender.email !== authData?.result.email &&
-				!location.pathname.includes("/chats")
-			) {
-			}
-		});
-		return () => {
-			channel.unbind_all();
-			channel.unsubscribe();
-		};
-	}, []);
 
 	const mainPageStyle = {
 		left: "250px",

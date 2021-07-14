@@ -38,7 +38,10 @@ const Navbar = () => {
 				</Link>
 				<Link to='#'>
 					<div className='profile'>
-						<Image src={authData?.result?.imageUrl} avatar />
+						<Image
+							src={authData?.result?.photoUrl || authData?.result?.imageUrl}
+							avatar
+						/>
 						<span>{authData?.result?.email}</span>
 					</div>
 				</Link>

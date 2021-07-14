@@ -136,7 +136,7 @@ const TaskDetail = ({ match }) => {
 										<Feed key={member?._id}>
 											<Feed.Event>
 												<Feed.Label>
-													<img src={member?.photoUrl} />
+													<img src={member?.photoUrl || member?.imageUrl} />
 												</Feed.Label>
 												<Feed.Content>
 													{member?.email == authData.result.email

@@ -17,7 +17,6 @@ const ChatDetail = ({ match }) => {
 	const { authData } = useSelector(state => state.auth);
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
-	const { result } = JSON.parse(localStorage.getItem("profile"));
 
 	useEffect(() => {
 		var pusher = new Pusher("3a0344f04d73dd86262c", {
@@ -115,14 +114,8 @@ const ChatDetail = ({ match }) => {
 				<div className='chatTitleBarContainer'>
 					<div className='chatImagesContainer'>
 						{chat?.users?.map((user, index) => {
-							var maxImagesToShow = 2;
-							var remainingUsers = chat?.users?.length - maxImagesToShow;
-							remainingUsers--;
-							if (index < 3 && user.email !== authData.result.email)
-								return <img key={user?._id} src={user?.photoUrl} />;
-							else if (remainingUsers > 0)
-								return <span className='userCount'>+{remainingUsers}</span>;
-							else return null;
+							console.log(chat?.users);
+							return <img key={user?._id} src={user?.photoUrl} />;
 						})}
 					</div>
 					<span id='chatName'>{chat?.chatName}</span>

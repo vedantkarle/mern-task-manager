@@ -20,7 +20,7 @@
 }
 
 
-.resultListItem{
+.notifications .resultListItem{
     padding:6px;
     color:#000;
     display: flex;
@@ -29,23 +29,23 @@
     border-bottom: 1px solid #eee;
 }
 
-.resultListItem:hover{
+.notifications .resultListItem:hover{
     background-color:#F2F2F2;
     color:#000;
 }
 
-.resultListItem.active{
+.notifications .resultListItem.active{
     background-color:#ceebf8;
 }
 
 
-.resultListItem img{
-    height:65%;
-    width:65%;
+.notifications .resultListItem img{
+    height:90%;
+    width:90%;
     border-radius: 50%;
 }
 
-.resultsImageContainer{
+.notifications .resultsImageContainer{
     height:50px;
     width:50px;
     position: relative;

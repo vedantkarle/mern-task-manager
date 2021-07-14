@@ -1,0 +1,20 @@
+.snackbar {
+    width:300px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.snackbar .symbol{
+    flex:20%;
+    font-size: 20px;
+}
+.snackbar .message{
+    flex:80%;
+    text-align:start;
+}
+
+.snackbar .message span{
+    font-weight: bold;
+}
